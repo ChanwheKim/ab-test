@@ -1,0 +1,33 @@
+.control-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 27%;
+  height: 100%;
+  font-size: 2rem;
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+
+  & a {
+    height: 5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    font-size: 1.7rem;
+    font-weight: 300;
+    text-decoration: none;
+    color: rgba(0, 0, 0, 0.84);
+    letter-spacing: .7px;
+
+    &:active,
+    &:visited {
+      color: rgba(0, 0, 0, 0.84);
+    }
+  }
+
+  & .link-active {
+    background-color: rgba(0, 0, 0, .02);
+  }
+}

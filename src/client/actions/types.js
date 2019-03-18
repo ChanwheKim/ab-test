@@ -1,0 +1,3 @@
+export const FETCH_PROJECTS = 'FETCH_PROJECTS';
+export const ADD_NEW_PROJECT = 'ADD_NEW_PROJECT';
+export const DELETE_PROJECT = 'DELETE_PROJECT';
