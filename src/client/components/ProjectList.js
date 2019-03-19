@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import './ProjectList.scss';
 import { IoMdAdd, IoMdCheckmark, IoMdClose } from 'react-icons/io';
 import Modal from './Modal';
@@ -29,8 +30,12 @@ class ProjectList extends Component {
     const id = ev.currentTarget.id;
     const deleteBtn = ev.target.closest('.project__list--btn-delete');
 
-    if (!id || !deleteBtn) {
+    if (!id) {
       return;
+    }
+
+    if (!deleteBtn) {
+      return this.props.onListClick(id);
     }
 
     this.props.onDeleteBtnClick(id);
@@ -47,7 +52,7 @@ class ProjectList extends Component {
   }
 
   handleSubmit() {
-    const projectName = this.state.name;
+    const projectName = this.state.name.trim();
 
     if (!projectName) {
       return;
@@ -65,8 +70,7 @@ class ProjectList extends Component {
   renderList() {
     return this.props.projects.map(item => (
       <li key={item._id} className="project__list" id={item._id} onClick={this.handleDeleteBtnClick}>
-        <IoMdClose size={27} className="project__list--btn-delete" />
-        <span className="project__list--item">PROJECT NAME : </span>
+        <IoMdClose size={17} className="project__list--btn-delete" />
         <span className="project__list--name">{item.name}</span>
       </li>
     ));
@@ -96,7 +100,7 @@ class ProjectList extends Component {
               autoFocus
             />
             <div className="popup__buttons">
-              <div className="btn btn-agree" onClick={() => {}}>
+              <div className="btn btn-agree">
                 <IoMdCheckmark size={20} />
                 <span onClick={this.handleSubmit}>Submit</span>
               </div>

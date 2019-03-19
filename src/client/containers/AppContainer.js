@@ -6,13 +6,14 @@ import {
   fetchProjects,
   addNewProject,
   deleteProject,
+  fetchTestList,
 } from '../actions/index';
 
 const mapStateToProps = ({ projects }) => ({
   projects,
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch, prevProps) => ({
   onProjectListMount: async () => {
     const projects = await axios.get('/api/projects');
 
@@ -31,6 +32,17 @@ const mapDispatchToProps = dispatch => ({
     const deletedProjectId = await axios.delete(`/api/projects/${projectId}`);
 
     dispatch(deleteProject(deletedProjectId.data));
+  },
+  onListClick: async (projectId) => {
+    let testList;
+
+    try {
+      testList = await axios.get(`/api/projects/${projectId}/testlist`);
+    } catch (err) {
+      return;
+    }
+
+    dispatch(fetchTestList(testList.data));
   },
 });
 

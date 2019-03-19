@@ -1,3 +1,7 @@
 export const FETCH_PROJECTS = 'FETCH_PROJECTS';
 export const ADD_NEW_PROJECT = 'ADD_NEW_PROJECT';
 export const DELETE_PROJECT = 'DELETE_PROJECT';
+
+export const FETCH_TESTLIST = 'FETCH_TESTLIST';
+export const ADD_NEW_TEST = 'ADD_NEW_TEST';
+export const DELETE_TEST_PAGE = 'DELETE_TEST_PAGE';

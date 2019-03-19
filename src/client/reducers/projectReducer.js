@@ -3,7 +3,9 @@ import { FETCH_PROJECTS, ADD_NEW_PROJECT, DELETE_PROJECT } from '../actions/type
 export default function projectReducer(state = [], action) {
   switch (action.type) {
     case FETCH_PROJECTS:
-      return action.payload;
+      return [
+        ...action.payload
+      ];
     case ADD_NEW_PROJECT:
       return [
         ...state,

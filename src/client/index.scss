@@ -8,8 +8,8 @@
 
 html,
 body {
-  color: #676b6d;
-  font-family: 'Lato', 'Arial', sans-serif;
+  color: #212121;
+  font-family: 'Roboto', "Helvetica Neue", Helvetica, Arial, sans-serif;
   box-sizing: border-box;
   font-size: 62.5%;
 }
@@ -26,11 +26,4 @@ a {
   width: 114rem;
   margin: 0 auto;
   z-index: -1;
-}
-
-.app {
-  height: 100vh;
-  padding: 5rem 0rem 5rem 0rem;
-  display: flex;
-  flex-direction: row;
 }
