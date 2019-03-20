@@ -7,10 +7,15 @@ import {
   deleteTestPage,
 } from '../actions/index';
 
-const mapStateToProps = ({ testList, projects }) => ({
-  projects,
-  testList,
-});
+const mapStateToProps = ({ testList, projects, currentProject }) => {
+  const filteredList = testList.filter(test => test.projectId === currentProject);
+
+  return {
+    projects,
+    testList: filteredList,
+    currentProject,
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
   onPlusBtnClick: async (projectId, testName) => {

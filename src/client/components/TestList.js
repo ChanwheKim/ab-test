@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './TestList.scss';
-import { IoMdAdd, IoMdClose, IoMdCheckmark, IoMdTv } from 'react-icons/io';
+import { IoMdClose, IoMdCheckmark, IoMdTv, IoIosReturnRight } from 'react-icons/io';
 import { FaCode, FaChartLine } from 'react-icons/fa';
 import Modal from './Modal';
 
@@ -67,7 +67,7 @@ class TestList extends Component {
 
   handleSubmit() {
     const testPageName = this.state.name.trim();
-    const { projectId } = this.props.testList[0];
+    const projectId = this.props.currentProject;
 
     if (!testPageName) {
       return;
@@ -83,8 +83,7 @@ class TestList extends Component {
   }
 
   renderTestList() {
-    const projectId = this.props.testList[0] && this.props.testList[0].projectId;
-    const project = this.props.projects.find(item => item._id === projectId);
+    const project = this.props.projects.find(item => item._id === this.props.currentProject);
 
     return this.props.testList.map((test, idx) => (
       <li key={test._id} className="test-list__item">
@@ -125,11 +124,13 @@ class TestList extends Component {
 
     return (
       <ul className="test-list">
-        <IoMdAdd
-          size={38}
+        <button
+          type="button"
           className="test-list__btn-add"
           onClick={() => this.setState({ showModal: true })}
-        />
+        >
+          Add a test page
+        </button>
         {
           this.renderTestList()
         }

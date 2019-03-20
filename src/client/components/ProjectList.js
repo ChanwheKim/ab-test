@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import './ProjectList.scss';
-import { IoMdAdd, IoMdCheckmark, IoMdClose } from 'react-icons/io';
+import { IoIosArrowForward, IoMdCheckmark, IoMdClose } from 'react-icons/io';
 import Modal from './Modal';
 
 class ProjectList extends Component {
@@ -70,6 +70,7 @@ class ProjectList extends Component {
   renderList() {
     return this.props.projects.map(item => (
       <li key={item._id} className="project__list" id={item._id} onClick={this.handleDeleteBtnClick}>
+        <IoIosArrowForward size={15} className="project__list--icon-arrow" />
         <IoMdClose size={17} className="project__list--btn-delete" />
         <span className="project__list--name">{item.name}</span>
       </li>
@@ -79,11 +80,13 @@ class ProjectList extends Component {
   render() {
     return (
       <ul className="project">
-        <IoMdAdd
-          size={38}
+        <button
+          type="button"
           className="project__btn-add"
           onClick={() => this.setState({ showModal: true })}
-        />
+        >
+          Set up project
+        </button>
         {
           this.renderList()
         }

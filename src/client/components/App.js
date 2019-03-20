@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import './App.scss';
+import { IoMdCheckmark } from 'react-icons/io';
 import ControlPanel from './ControlPanel';
 import ProjectList from './ProjectList';
 import TestListContainer from '../containers/TestListContainer';
+import Modal from './Modal';
 
 export default class App extends Component {
   componentDidMount() {
@@ -12,7 +14,12 @@ export default class App extends Component {
   }
 
   render() {
-    const { projects, onPlusBtnClick, onDeleteBtnClick, onListClick } = this.props;
+    const {
+      projects,
+      onPlusBtnClick,
+      onDeleteBtnClick,
+      onListClick
+    } = this.props;
 
     return (
       <Router>
@@ -37,6 +44,16 @@ export default class App extends Component {
               </div>
             </div>
           </div>
+          {
+            this.props.modal.showModal &&
+            <Modal>
+              {this.props.modal.message}
+              <div className="btn btn-agree" onClick={this.props.onConfirmClick}>
+                <IoMdCheckmark size={20} />
+                <span>Confirm</span>
+              </div>
+            </Modal>
+          }
         </div>
       </Router>
     );

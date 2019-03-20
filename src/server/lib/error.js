@@ -1,7 +1,7 @@
 class NotFoundError extends Error {
   constructor() {
     super();
-    this.message = 'Oops! This page doesn\'t exist.';
+    this.message = 'Oops! We couldn\'t process your request. Could you please try again?';
     this.status = 404;
   }
 }

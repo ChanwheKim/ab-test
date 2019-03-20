@@ -1,14 +1,12 @@
 .test-list {
   display: flex;
-  height: 100vh;
   flex-grow: 1;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: center;
+  align-items: stretch;
   padding-right: 5rem;
 
   &__item {
-    width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -84,8 +82,13 @@
       width: 20rem;
       position: relative;
       padding-left: 1rem;
-      color: #212121;
+      color: rgba(#212121, .9);
       cursor: pointer;
+
+      &:hover .test-list__btn-delete {
+        transform: translateX(3rem);
+        opacity: 1;
+      }
 
       & .icon {
         margin-right: 1.5rem;
@@ -104,18 +107,24 @@
   }
 
   &__btn-add {
-    font-weight: 300;
-    color: rgba(0, 0, 0, 0.74);
-    align-self: flex-end;
-    margin-right: 3rem;
-    margin-bottom: 2rem;
+    height: 3.5rem;
+    width: 11rem;
+    color: #ffffff;
     cursor: pointer;
+    background-color: rgb(58, 163, 242);
+    border: none;
+    margin-top: .7rem;
+    margin-bottom: .7rem;
+    font-size: 1.2rem;
+    border-radius: 3px;
+    align-self: flex-end;
   }
 
   &__btn-delete {
     transition: all .2s;
     cursor: pointer;
     transform: translateX(5rem);
+    opacity: 0;
   }
 }
 

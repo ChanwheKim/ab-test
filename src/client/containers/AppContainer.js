@@ -7,20 +7,30 @@ import {
   addNewProject,
   deleteProject,
   fetchTestList,
+  setCurrentProjectID,
+  displayModal,
+  removeModal,
 } from '../actions/index';
 
-const mapStateToProps = ({ projects }) => ({
+const mapStateToProps = ({ projects, modal }) => ({
   projects,
+  modal
 });
 
-const mapDispatchToProps = (dispatch, prevProps) => ({
+const mapDispatchToProps = dispatch => ({
   onProjectListMount: async () => {
     const projects = await axios.get('/api/projects');
 
     dispatch(fetchProjects(projects.data));
   },
   onPlusBtnClick: async (name) => {
-    const newProject = await axios.post(`/api/projects/${name}`);
+    let newProject;
+
+    try {
+      newProject = await axios.post(`/api/projects/${name}`);
+    } catch (err) {
+      dispatch(displayModal(err.message));
+    }
 
     if (!newProject) {
       return;
@@ -36,6 +46,8 @@ const mapDispatchToProps = (dispatch, prevProps) => ({
   onListClick: async (projectId) => {
     let testList;
 
+    dispatch(setCurrentProjectID(projectId));
+
     try {
       testList = await axios.get(`/api/projects/${projectId}/testlist`);
     } catch (err) {
@@ -43,6 +55,9 @@ const mapDispatchToProps = (dispatch, prevProps) => ({
     }
 
     dispatch(fetchTestList(testList.data));
+  },
+  onConfirmClick: () => {
+    dispatch(removeModal());
   },
 });
 

@@ -6,10 +6,9 @@ import { FaListUl } from 'react-icons/fa';
 const ControlPanel = () => ((
   <div className="control-panel">
     <NavLink exact to="/" activeClassName="link-active" className="nav-btn">
-      <FaListUl size={25} className="nav-btn-icon"/>
+      <FaListUl size={23} className="nav-btn-icon" />
       <span>Project</span>
     </NavLink>
-    <NavLink to="/dashboard" activeClassName="link-active">Dashboard</NavLink>
   </div>
 ));
 
