@@ -15,7 +15,7 @@ class TestList extends Component {
     };
 
     this.inputRef = React.createRef();
-  
+
     this.closeCode = this.closeCode.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.handleDeleteBtnClick = this.handleDeleteBtnClick.bind(this);
@@ -23,6 +23,7 @@ class TestList extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleCodeClick = this.handleCodeClick.bind(this);
+    this.handleScreenIconClick = this.handleScreenIconClick.bind(this);
   }
 
   closeCode() {
@@ -82,6 +83,17 @@ class TestList extends Component {
     });
   }
 
+  handleScreenIconClick(ev) {
+    const { uniqid } = ev.target.dataset;
+
+    if (!uniqid) {
+      return;
+    }
+
+    this.props.history.push('/screenshot');
+    this.props.displayScreenshot(uniqid);
+  }
+
   renderTestList() {
     const project = this.props.projects.find(item => item._id === this.props.currentProject);
 
@@ -106,7 +118,7 @@ class TestList extends Component {
         </div>
         <div className="test-list__item--icons">
           <FaCode size={20} className="icon" data-id={test._id} onClick={this.handleCodeClick} />
-          <IoMdTv size={20} className="icon" />
+          <IoMdTv size={20} className="icon" data-uniqid={test.uniqId} onClick={this.handleScreenIconClick} />
           <FaChartLine className="icon" size={20} />
           <IoMdClose
             size={20}
@@ -139,8 +151,8 @@ class TestList extends Component {
           <div className="code">
             <div className="code-snippet-wrapper">
               <pre className="code-snippet">
-                <span className="code-snippet__green">{'<script'} </span><span className="code-snippet__white">{'type='}</span>{'"text/javascript" '}<span className="code-snippet__white">{'src='}</span>{'"http://www.vanilla-test.com?key='}{test.uniqId}<span className="code-snippet__green">{'"></script>'}</span>
-                <p className="code-label">{'<script type="text/javascript" src="http://www.vanilla-test.com?key='}{test.uniqId}{'"></script>'}</p>
+                <span className="code-snippet__green">{'<script'} </span><span className="code-snippet__white">{'type='}</span>{'"text/javascript" '}<span className="code-snippet__white">{'src='}</span>{'"http://localhost:8080/api/test-page/source-file?key='}{test.uniqId}<span className="code-snippet__green">{'"></script>'}</span>
+                <p className="code-label">{'<script type="text/javascript" src="http://localhost:8080/api/test-page/source-file?key='}{test.uniqId}{'"></script>'}</p>
               </pre>
             </div>
             <div className="btn-close-code" onClick={this.closeCode}>Close</div>

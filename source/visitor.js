@@ -2,9 +2,8 @@ const interval = 100;
 let waiting = false;
 
 window.addEventListener('DOMContentLoaded', () => {
-  console.log('key is ', key);
   const url = window.location.href;
-  console.log(url);
+
   const event = {
     name: 'connect',
     url,
@@ -75,4 +74,4 @@ window.addEventListener('DOMContentLoaded', () => {
 window.onunload = () => {
 
 };
-const key = "sktwia1ujth7nrex";
+const key = "sktwi4kgjti7gucx";

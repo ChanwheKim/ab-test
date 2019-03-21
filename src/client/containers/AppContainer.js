@@ -10,11 +10,14 @@ import {
   setCurrentProjectID,
   displayModal,
   removeModal,
+  displayTestListLoader,
+  removeTestListLoader,
 } from '../actions/index';
 
-const mapStateToProps = ({ projects, modal }) => ({
+const mapStateToProps = ({ projects, modal, screenshot }) => ({
   projects,
-  modal
+  modal,
+  screenshot,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -29,6 +32,10 @@ const mapDispatchToProps = dispatch => ({
     try {
       newProject = await axios.post(`/api/projects/${name}`);
     } catch (err) {
+      if (err.message === 'Request failed with status code 500') {
+        err.message = 'Oops. Could you please try it agian.';
+      }
+
       dispatch(displayModal(err.message));
     }
 
@@ -47,6 +54,7 @@ const mapDispatchToProps = dispatch => ({
     let testList;
 
     dispatch(setCurrentProjectID(projectId));
+    dispatch(displayTestListLoader());
 
     try {
       testList = await axios.get(`/api/projects/${projectId}/testlist`);
@@ -55,6 +63,7 @@ const mapDispatchToProps = dispatch => ({
     }
 
     dispatch(fetchTestList(testList.data));
+    dispatch(removeTestListLoader());
   },
   onConfirmClick: () => {
     dispatch(removeModal());

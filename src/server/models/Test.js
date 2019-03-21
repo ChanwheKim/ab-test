@@ -11,7 +11,7 @@ const testSchema = new Schema({
   visit: [Object],
   visit_count: Number,
   revisit_count: Number,
-  visitorIPs: Object,
+  url: String,
 });
 
 module.exports = mongoose.model('tests', testSchema);

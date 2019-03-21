@@ -8,6 +8,9 @@ import {
   SET_CURRENT_PROJECT_ID,
   DISPLAY_MODAL,
   REMOVE_MODAL,
+  LOADING_TEST_LIST,
+  REMOVE_TEST_LIST_LOADER,
+  FETCH_SCREENSHOT_URL,
 } from './types';
 
 export const fetchProjects = projects => ({
@@ -53,4 +56,19 @@ export const displayModal = message => ({
 export const removeModal = () => ({
   type: REMOVE_MODAL,
   payload: '',
+});
+
+export const displayTestListLoader = () => ({
+  type: LOADING_TEST_LIST,
+  payload: true,
+});
+
+export const removeTestListLoader = () => ({
+  type: REMOVE_TEST_LIST_LOADER,
+  payload: false,
+});
+
+export const fetchScreenshotUrl = url => ({
+  type: FETCH_SCREENSHOT_URL,
+  payload: url,
 });

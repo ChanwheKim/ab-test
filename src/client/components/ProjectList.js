@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import './ProjectList.scss';
 import { IoIosArrowForward, IoMdCheckmark, IoMdClose } from 'react-icons/io';
 import Modal from './Modal';

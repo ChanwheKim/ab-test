@@ -31,5 +31,6 @@
     "react/jsx-one-expression-per-line": "off",
     "operator-linebreak": "off",
     "jsx-a11y/no-autofocus": "off",
+    "no-new": "off"
   }
 }

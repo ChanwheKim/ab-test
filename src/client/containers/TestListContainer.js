@@ -1,19 +1,24 @@
 import { connect } from 'react-redux';
 import axios from 'axios';
+import { withRouter } from 'react-router';
 
 import TestList from '../components/TestList';
 import {
   addNewTestPage,
   deleteTestPage,
+  displayModal,
+  fetchScreenshotUrl,
 } from '../actions/index';
 
-const mapStateToProps = ({ testList, projects, currentProject }) => {
+const mapStateToProps = (state) => {
+  const { testList, projects, currentProject, isTestListLoading } = state;
   const filteredList = testList.filter(test => test.projectId === currentProject);
 
   return {
     projects,
     testList: filteredList,
     currentProject,
+    isLoading: isTestListLoading
   };
 };
 
@@ -24,7 +29,11 @@ const mapDispatchToProps = dispatch => ({
     try {
       newTest = await axios.post(`/api/projects/${projectId}/testlist/${testName}`);
     } catch (err) {
-      return;
+      if (err.message === 'Request failed with status code 500') {
+        err.message = 'Oops. Could you please try it agian.';
+      }
+
+      return dispatch(displayModal(err.message));
     }
 
     dispatch(addNewTestPage(newTest.data));
@@ -39,10 +48,21 @@ const mapDispatchToProps = dispatch => ({
     }
 
     dispatch(deleteTestPage(deletedTest.data));
-  }
+  },
+  displayScreenshot: async (uniqId) => {
+    let screenshot;
+
+    try {
+      screenshot = await axios.get(`/api/test-page/${uniqId}/screen-shot`);
+    } catch (err) {
+      return;
+    }
+
+    dispatch(fetchScreenshotUrl(screenshot.data));
+  },
 });
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps,
-)(TestList);
+)(TestList));
