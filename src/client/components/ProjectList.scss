@@ -88,19 +88,42 @@
   &__title {
     font-size: 1.7rem;
     height: 2.5rem;
-    margin-bottom: 1rem;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
   }
 
   &__input {
     height: 3rem;
     margin-bottom: 1rem;
-    width: 25rem;
-    font-size: 1.7rem;
+    width: 45rem;
+    font-size: 1.5rem;
     font-weight: 300;
+    padding-left: 1rem;
+    letter-spacing: .7px;
 
     &:focus {
       outline: none;
     }
+
+    &.name {
+      margin-bottom: 2rem;
+    }
+
+    &.origin {
+      &::placeholder {
+
+      }
+    }
+  }
+
+  &__description {
+    height: 3rem;
+    margin-bottom: 3rem;
+    width: 45rem;
+    font-size: 1.2rem;
+    font-weight: 300;
+    padding: 0 1.5rem;
+    display: block;
   }
 }
 
@@ -113,6 +136,7 @@
   font-size: 1.5rem;
   cursor: pointer;
   margin-top: 1.5rem;
+  margin-bottom: 2rem;
   display: flex;
   flex-direction: row;
   justify-content: center;

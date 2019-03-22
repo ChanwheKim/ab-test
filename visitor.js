@@ -4,73 +4,55 @@ let waiting = false;
 window.addEventListener('DOMContentLoaded', () => {
   const url = window.location.href;
 
-  const event = {
+  const connectEvent = {
     name: 'connect',
     url,
   };
 
-  fetch(`http://localhost:8080/api/test-page/${key}`, {
-    method: 'POST',
+  fetch(`http://abtest-env.zui4w2hpdb.ap-northeast-2.elasticbeanstalk.com/api/test-page/${key}?event=${JSON.stringify(connectEvent)}`, {
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ event }),
-  })
-    .then(res => res.json())
-    .then(res => console.log(res));
+    method: 'POST',
+    credentials: 'include',
+    mode: 'no-cors',
+  });
 
   document.body.addEventListener('click', (ev) => {
     const isButtonCTA = !!ev.target.closest('.vabt-cta-btn');
 
-    const event = {
+    const clickEvent = {
       name: 'click',
       x: ev.pageX,
       y: ev.pageY,
       isButtonCTA,
     };
 
-    fetch(`http://localhost:8080/api/test-page/${key}`, {
-      method: 'POST',
+    fetch(`http://abtest-env.zui4w2hpdb.ap-northeast-2.elasticbeanstalk.com/api/test-page/${key}?event=${JSON.stringify(clickEvent)}`, {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ event }),
-    })
-      .then(res => res.json())
-      .then(res => console.log(res));
-  });
-
-  document.body.addEventListener('mousemove', (ev) => {
-    if (!waiting) {
-      waiting = true;
-
-      const event = {
-        name: 'mousemove',
-        x: ev.pageX,
-        y: ev.pageY,
-      };
-
-      fetch(`http://localhost:8080/api/test-page/${key}`, {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ event }),
-      })
-        .then(res => res.json())
-        .then(res => console.log(res))
-        .then(() => {
-          setTimeout(() => {
-            waiting = false;
-          }, interval);
-        });
-    }
+      method: 'POST',
+      credentials: 'include',
+      mode: 'no-cors',
+    });
   });
 });
 
 window.onunload = () => {
+  const event = {
+    name: 'leave',
+  };
 
+  fetch(`http://localhost:8080/api/test-page/${key}?event=${JSON.stringify(event)}`, {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+    credentials: 'include',
+    mode: 'no-cors',
+  });
 };

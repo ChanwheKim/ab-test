@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './TestList.scss';
-import { IoMdClose, IoMdCheckmark, IoMdTv, IoIosReturnRight } from 'react-icons/io';
-import { FaCode, FaChartLine } from 'react-icons/fa';
+import { IoMdClose, IoMdCheckmark, IoMdTv } from 'react-icons/io';
+import { FaCode, FaChartLine, FaSpinner } from 'react-icons/fa';
 import Modal from './Modal';
 
 class TestList extends Component {
@@ -35,7 +35,7 @@ class TestList extends Component {
   }
 
   handleCodeClick(ev) {
-    const id = ev.target.dataset.id;
+    const id = ev.target.closest('.icon-code').dataset.id;
 
     if (!id) {
       return;
@@ -95,6 +95,10 @@ class TestList extends Component {
   }
 
   renderTestList() {
+    if (this.props.currentProject && !this.props.testList.length && !this.props.isLoading) {
+      return <div className="no-test-page-label">There is no test page you registered.</div>;
+    }
+
     const project = this.props.projects.find(item => item._id === this.props.currentProject);
 
     return this.props.testList.map((test, idx) => (
@@ -105,19 +109,27 @@ class TestList extends Component {
           <span className="test-name">{test.name}</span>
         </div>
         <div className="test-list__item--visitor">
-          <span className="label">Visitors</span>
-          <span className="count">{idx}</span>
+          <span className="label">Visit</span>
+          <span className="count">{test.visitIds.length}</span>
+        </div>
+        <div className="test-list__item--revisitor">
+          <span className="label">Revisit</span>
+          <span className="count">{test.revisit_count}</span>
+        </div>
+        <div className="test-list__item--revisit-rate">
+          <span className="label">Revisit rate</span>
+          <span className="count">{((test.revisit_count / test.visit_count) * 100).toFixed(2)}%</span>
         </div>
         <div className="test-list__item--conversion">
           <span className="label">Conversion</span>
-          <span className="count">{idx}</span>
+          <span className="count">{test.conversion}</span>
         </div>
         <div className="test-list__item--rate">
           <span className="label">Conversion rate</span>
-          <span className="count">{idx}%</span>
+          <span className="count">{((test.conversion / test.visitIds.length) * 100).toFixed(2)}%</span>
         </div>
         <div className="test-list__item--icons">
-          <FaCode size={20} className="icon" data-id={test._id} onClick={this.handleCodeClick} />
+          <FaCode size={20} className="icon-code" data-id={test._id} onClick={this.handleCodeClick} />
           <IoMdTv size={20} className="icon" data-uniqid={test.uniqId} onClick={this.handleScreenIconClick} />
           <FaChartLine className="icon" size={20} />
           <IoMdClose
@@ -140,9 +152,16 @@ class TestList extends Component {
           type="button"
           className="test-list__btn-add"
           onClick={() => this.setState({ showModal: true })}
+          disabled={this.props.currentProject === ''}
         >
           Add a test page
         </button>
+        {
+          this.props.isLoading &&
+          <div className="loader-background">
+            <FaSpinner className="test-list__loader" size={37} />
+          </div>
+        }
         {
           this.renderTestList()
         }
@@ -157,7 +176,7 @@ class TestList extends Component {
             </div>
             <div className="btn-close-code" onClick={this.closeCode}>Close</div>
           </div>
-      }
+        }
         {
           this.state.showModal &&
           <Modal onBackgroundClick={this.closeModal}>

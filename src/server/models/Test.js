@@ -8,7 +8,7 @@ const testSchema = new Schema({
   projectId: { type: mongoose.Schema.Types.ObjectId, ref: 'projects' },
   clickEvent: [Object],
   conversion: Number,
-  visit: [Object],
+  visitIds: Array,
   visit_count: Number,
   revisit_count: Number,
   url: String,

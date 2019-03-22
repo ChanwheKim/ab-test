@@ -8,6 +8,7 @@ import {
   deleteTestPage,
   displayModal,
   fetchScreenshotUrl,
+  loadingScreenshot,
 } from '../actions/index';
 
 const mapStateToProps = (state) => {
@@ -51,6 +52,8 @@ const mapDispatchToProps = dispatch => ({
   },
   displayScreenshot: async (uniqId) => {
     let screenshot;
+
+    dispatch(loadingScreenshot());
 
     try {
       screenshot = await axios.get(`/api/test-page/${uniqId}/screen-shot`);

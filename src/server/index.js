@@ -1,10 +1,26 @@
 const express = require('express');
+const cookieParser = require('cookie-parser');
 const compression = require('compression');
+const cookieSession = require('cookie-session');
 const index = require('./routes/index');
 const { NotFoundError } = require('./lib/error');
+const bodyParser = require('body-parser');
 
 const app = express();
+
 app.use(compression());
+app.use(cookieParser());
+
+app.use(
+	cookieSession({
+		name: 'session',
+		maxAge: 30 * 24 * 60 * 60 * 1000,
+		keys: ['adsfasdfsadf'],
+	})
+);
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

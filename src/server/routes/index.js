@@ -5,10 +5,12 @@ const fs = require('fs');
 const cheerio = require('cheerio');
 const geoip = require('geoip-lite');
 const Inliner = require('inliner');
+const cookie = require('cookie');
 
 const keys = require('../config/keys');
 const Project = require('../models/Project');
 const Test = require('../models/Test');
+const Visit = require('../models/Visit');
 const { GeneralServiceError, WrongEntityError } = require('../lib/error');
 
 const router = express.Router();
@@ -26,11 +28,13 @@ db.once('open', () => {
 
 router.post('/projects/:project_name', async (req, res, next) => {
   const name = req.params.project_name;
+  const { origin } = req.body;
   let newProject;
 
   try {
     newProject = await new Project({
       name,
+      origin,
     }).save();
   } catch (err) {
     return next(new GeneralServiceError());
@@ -60,6 +64,14 @@ router.delete('/projects/:project_id', async (req, res, next) => {
     return next(new GeneralServiceError());
   }
 
+  try {
+    await Promise.all(project.testIds.map(
+      test => Test.findOneAndDelete({ _id: test._id })
+    ));
+  } catch (err) {
+    return next(new GeneralServiceError());
+  }
+
   res.json(project._id);
 });
 
@@ -81,7 +93,7 @@ router.post('/projects/:project_id/testlist/:test_name', async (req, res, next) 
       projectId,
       clickEvent: [],
       conversion: 0,
-      visit: [],
+      visitIds: [],
       visit_count: 0,
       revisit_count: 0,
       visitorIPs: {},
@@ -127,6 +139,11 @@ router.delete('/projects/testlist/:testlist_id', async (req, res, next) => {
   const project = await Project.findById(testList.projectId);
 
   project.testIds.pull(testList._id);
+
+  await Promise.all(
+    testList.visitIds.map(id => Visit.findOneAndDelete({ _id: id }))
+  );
+
   await project.save();
 
   res.json(testList._id);
@@ -159,67 +176,94 @@ router.get('/test-page/source-file', (req, res, next) => {
 
 router.post('/test-page/:uniqId', async (req, res, next) => {
   const { uniqId } = req.params;
-  const { event } = req.body;
-  let test;
+  const event = JSON.parse(req.query.event);
+  const { visitId } = req.cookies;
+  let visit;
+  let testPage;
   event.date = new Date();
 
   try {
-    test = await Test.findOne({ uniqId });
+    testPage = await Test.findOne({ uniqId });
   } catch (err) {
     return next(GeneralServiceError());
   }
 
-  if (!uniqId.trim() || !test) {
+  if (!uniqId.trim() || !testPage) {
     return next(WrongEntityError());
   }
 
   if (event.name === 'connect') {
-    const geo = geoip.lookup(req.connection.remoteAddress);
-
-    const visit = {
-      geo,
-      ip: req.connection.remoteAddress,
-      date: new Date(),
-    };
-
-    test.visit.push(visit);
-
-    if (!test.url) {
-      const { url } = event;
-
-      test.url = url;
+    if (visitId) {
+      testPage.revisit_count++;
     }
 
-    test.visit_count++;
+    const geo = geoip.lookup(req.connection.remoteAddress);
+
+    try {
+      visit = await new Visit({
+        geo,
+        ip: req.connection.remoteAddress,
+        connected_at: new Date(),
+        left_at: '',
+      }).save();
+    } catch (err) {
+      return next(GeneralServiceError());
+    }
+
+    testPage.visitIds.push(visit._id);
+
+    if (!testPage.url) {
+      const { url } = event;
+
+      testPage.url = url;
+    }
+
+    testPage.visit_count++;
+
+    res.setHeader('Set-Cookie', cookie.serialize('visitId', String(visit._id), {
+      maxAge: 60 * 60 * 24 * 7,
+    }));
   }
 
   if (event.name === 'click') {
-    test.clickEvent.push(event);
+    testPage.clickEvent.push(event);
 
     if (event.isButtonCTA) {
-      test.conversion++;
+      testPage.conversion++;
     }
   }
 
-  await test.save();
+  if (event.name === 'leave') {
+    const preVisit = await Visit.findById(visitId);
 
-  res.json(event);
+    preVisit.left_at = new Date();
+
+    await preVisit.save();
+  }
+
+  await testPage.save();
+
+  res.end();
 });
 
-router.get('/test-page/:uniqId/screen-shot', async (req, res) => {
+router.get('/test-page/:uniqId/screen-shot', async (req, res, next) => {
   const { uniqId } = req.params;
-
+  let testPage;
   const script = fs.readFileSync('./bubble.js', 'utf8');
 
-  const test = await Test.findOne({ uniqId });
+  try {
+    testPage = await Test.findOne({ uniqId });
+  } catch (err) {
+    return next(GeneralServiceError());
+  }
 
-  const coordinate = test.clickEvent.map(event => [event.x, event.y]);
+  const coordinate = testPage.clickEvent.map(event => [event.x, event.y]);
 
   const dataset = 'const dataset = ' + JSON.stringify(coordinate);
 
   const html = await new Promise((resolve, reject) => {
-    new Inliner(test.url, (err, res) => {
-      resolve(res);
+    new Inliner(testPage.url, (err, response) => {
+      resolve(response);
     });
   });
 

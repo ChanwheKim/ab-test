@@ -49,6 +49,8 @@
     }
 
     &--visitor,
+    &--revisitor,
+    &--revisit-rate,
     &--conversion,
     &--rate {
       font-size: 1.4rem;
@@ -58,21 +60,35 @@
     &--visitor {
       display: flex;
       flex-direction: column;
-      width: 20rem;
+      width: 13%;
+      position: relative;
+    }
+
+    &--revisitor {
+      display: flex;
+      flex-direction: column;
+      width: 13%;
+      position: relative;
+    }
+
+    &--revisit-rate {
+      display: flex;
+      flex-direction: column;
+      width: 13%;
       position: relative;
     }
 
     &--conversion {
       display: flex;
       flex-direction: column;
-      width: 20rem;
+      width: 13%;
       position: relative;
     }
 
     &--rate {
       display: flex;
       flex-direction: column;
-      width: 20rem;
+      width: 13%;
       position: relative;
     }
 
@@ -91,6 +107,10 @@
       }
 
       & .icon {
+        margin-right: 1.5rem;
+      }
+
+      & .icon-code {
         margin-right: 1.5rem;
       }
     }
@@ -118,6 +138,10 @@
     font-size: 1.2rem;
     border-radius: 3px;
     align-self: flex-end;
+
+    &:disabled {
+      background-color: rgba(58, 163, 242, .3);
+    }
   }
 
   &__btn-delete {
@@ -125,6 +149,15 @@
     cursor: pointer;
     transform: translateX(5rem);
     opacity: 0;
+  }
+
+  &__loader {
+    color: rgba(#555, 1);
+    animation: rotate 1.5s infinite linear;
+    position: absolute;
+    top: 50%;
+    left: 58%;
+    transform: translate(-50%, -50%);
   }
 }
 
@@ -205,4 +238,30 @@
   border-radius: 1.7rem;
   background-color: #fff;
   cursor: pointer;
+}
+
+@keyframes rotate {
+  0% {
+      transform: rotate(0);}
+  100% {
+      transform: rotate(360deg);}
+}
+
+.loader-background {
+  background-color: transparent;
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.no-test-page-label {
+  width: 100%;
+  height: 50rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  color: #212121;
 }

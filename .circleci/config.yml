@@ -18,11 +18,6 @@ jobs:
             sudo pip install awsebcli --upgrade
       - run:
           # NPM Dependencies 설치
-          name: Install NPM Dependencies
-          command: |
-            sudo npm install --unsafe-perm=true -g
-      - run:
-          # NPM Dependencies 설치
           name: Install NPM Webpack
           command: |
             sudo npm i -g webpack
@@ -31,6 +26,11 @@ jobs:
           name: Install NPM Webpack Cli
           command: |
             sudo npm install webpack-cli
+      - run:
+          # NPM Dependencies 설치
+          name: Install NPM Dependencies
+          command: |
+            sudo npm install --unsafe-perm=true -g
       - run:
           # NPM Dependencies 설치
           name: Build my app

@@ -6,11 +6,14 @@ import {
   ADD_NEW_TEST,
   DELETE_TEST_PAGE,
   SET_CURRENT_PROJECT_ID,
+  REMOVE_CURRENT_PROJECT_ID,
   DISPLAY_MODAL,
   REMOVE_MODAL,
   LOADING_TEST_LIST,
   REMOVE_TEST_LIST_LOADER,
   FETCH_SCREENSHOT_URL,
+  LOADING_SCREENSHOT_SOURCE,
+  INITIALIZE_SCREENSHOT_STATE,
 } from './types';
 
 export const fetchProjects = projects => ({
@@ -31,6 +34,11 @@ export const deleteProject = projectId => ({
 export const setCurrentProjectID = projectId => ({
   type: SET_CURRENT_PROJECT_ID,
   payload: projectId,
+});
+
+export const removeCurrentProjectId = () => ({
+  type: REMOVE_CURRENT_PROJECT_ID,
+  payload: '',
 });
 
 export const fetchTestList = testList => ({
@@ -71,4 +79,17 @@ export const removeTestListLoader = () => ({
 export const fetchScreenshotUrl = url => ({
   type: FETCH_SCREENSHOT_URL,
   payload: url,
+});
+
+export const loadingScreenshot = () => ({
+  type: LOADING_SCREENSHOT_SOURCE,
+  payload: true,
+});
+
+export const initScreenshotState = () => ({
+  type: INITIALIZE_SCREENSHOT_STATE,
+  payload: {
+    isLoading: false,
+    source: '',
+  },
 });

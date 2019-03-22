@@ -10,15 +10,18 @@ class ProjectList extends Component {
     this.state = {
       showModal: false,
       name: '',
+      origin: '',
     };
 
     this.inputRef = React.createRef();
+    this.inputOrigin = React.createRef();
 
     this.closeModal = this.closeModal.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleDeleteBtnClick = this.handleDeleteBtnClick.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.handleOriginInputChange = this.handleOriginInputChange.bind(this);
   }
 
   closeModal() {
@@ -26,7 +29,7 @@ class ProjectList extends Component {
   }
 
   handleDeleteBtnClick(ev) {
-    const id = ev.currentTarget.id;
+    const { id } = ev.currentTarget;
     const deleteBtn = ev.target.closest('.project__list--btn-delete');
 
     if (!id) {
@@ -44,6 +47,10 @@ class ProjectList extends Component {
     this.setState({ name: ev.target.value });
   }
 
+  handleOriginInputChange(ev) {
+    this.setState({ origin: ev.target.value });
+  }
+
   handleKeyDown(ev) {
     if (ev.keyCode === 13) {
       this.handleSubmit();
@@ -52,16 +59,20 @@ class ProjectList extends Component {
 
   handleSubmit() {
     const projectName = this.state.name.trim();
+    const { origin } = this.state;
 
-    if (!projectName) {
+    if (!projectName && !origin) {
       return;
     }
 
-    this.props.onPlusBtnClick(projectName);
+    this.props.onPlusBtnClick(projectName, origin);
 
     this.inputRef.current.value = '';
+    this.inputOrigin.current.value = '';
+
     this.setState({
       name: '',
+      origin: '',
       showModal: false,
     });
   }
@@ -92,15 +103,24 @@ class ProjectList extends Component {
         {
           this.state.showModal &&
           <Modal onClick={this.closeModal} onBackgroundClick={this.closeModal}>
-            <span className="new-project__title">New Project Name</span>
+            <span className="new-project__title">New Project</span>
             <input
               type="text"
-              className="new-project__input"
+              className="new-project__input name"
               onChange={this.handleInputChange}
               ref={this.inputRef}
               onKeyDown={this.handleKeyDown}
+              placeholder="Project name"
               autoFocus
             />
+            <input
+              type="text"
+              className="new-project__input origin"
+              placeholder="Origin URI"
+              onChange={this.handleOriginInputChange}
+              ref={this.inputOrigin}
+            />
+            <p className="new-project__description">For use with requests from a browser. This is the origin URI of the client application. It can't contain a wildcard (https://*.example.com) or a path (https://example.com/subdir).</p>
             <div className="popup__buttons">
               <div className="btn btn-agree">
                 <IoMdCheckmark size={20} />

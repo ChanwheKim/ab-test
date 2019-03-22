@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import './App.scss';
 import { IoMdCheckmark } from 'react-icons/io';
+import { FaAngleDoubleRight } from 'react-icons/fa';
 import ControlPanel from './ControlPanel';
 import ProjectList from './ProjectList';
 import TestListContainer from '../containers/TestListContainer';
@@ -19,19 +20,33 @@ export default class App extends Component {
       projects,
       onPlusBtnClick,
       onDeleteBtnClick,
-      onListClick
+      onListClick,
+      screenshot,
+      onScreenshotUnmount,
+      currentProject,
     } = this.props;
+
+    const curProjectName = currentProject && projects.find(item => item._id === currentProject).name;
 
     return (
       <Router>
         <Switch>
-          <Route path="/screenshot" render={() => <Screenshot url={this.props.screenshot} />} />
+          <Route
+            path="/screenshot"
+            render={() => (
+              <Screenshot screenshot={screenshot} onUnmount={onScreenshotUnmount} />
+            )}
+          />
           <div className="app">
             <header className="header" />
             <div className="app-main">
               <ControlPanel />
               <div className="content-wrapper">
-                <div className="header-path"></div>
+                <div className="header-path">
+                  <span className="header-path__project-label">Project</span>
+                  <FaAngleDoubleRight className="header-path__icon-arrow" size={15} />
+                  <span className="header-path__project-name">{curProjectName}</span>
+                </div>
                 <div className="list">
                   <Route exact path="/" render={() => (
                     <ProjectList

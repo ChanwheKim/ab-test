@@ -12,12 +12,15 @@ import {
   removeModal,
   displayTestListLoader,
   removeTestListLoader,
+  initScreenshotState,
+  removeCurrentProjectId,
 } from '../actions/index';
 
-const mapStateToProps = ({ projects, modal, screenshot }) => ({
+const mapStateToProps = ({ projects, modal, screenshot, currentProject }) => ({
   projects,
   modal,
   screenshot,
+  currentProject,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -26,11 +29,13 @@ const mapDispatchToProps = dispatch => ({
 
     dispatch(fetchProjects(projects.data));
   },
-  onPlusBtnClick: async (name) => {
+  onPlusBtnClick: async (name, origin) => {
     let newProject;
 
     try {
-      newProject = await axios.post(`/api/projects/${name}`);
+      newProject = await axios.post(`/api/projects/${name}`, {
+        origin,
+      });
     } catch (err) {
       if (err.message === 'Request failed with status code 500') {
         err.message = 'Oops. Could you please try it agian.';
@@ -46,8 +51,15 @@ const mapDispatchToProps = dispatch => ({
     dispatch(addNewProject(newProject.data));
   },
   onDeleteBtnClick: async (projectId) => {
-    const deletedProjectId = await axios.delete(`/api/projects/${projectId}`);
+    let deletedProjectId;
 
+    try {
+      deletedProjectId = await axios.delete(`/api/projects/${projectId}`);
+    } catch (err) {
+      dispatch(displayModal(err.message));
+    }
+
+    dispatch(removeCurrentProjectId());
     dispatch(deleteProject(deletedProjectId.data));
   },
   onListClick: async (projectId) => {
@@ -67,6 +79,9 @@ const mapDispatchToProps = dispatch => ({
   },
   onConfirmClick: () => {
     dispatch(removeModal());
+  },
+  onScreenshotUnmount: () => {
+    dispatch(initScreenshotState());
   },
 });
 
