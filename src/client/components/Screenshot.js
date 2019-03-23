@@ -26,6 +26,7 @@ class Screenshot extends Component {
 export default Screenshot;
 
 Screenshot.propTypes = {
+  onUnmount: PropTypes.func,
   screenshot: PropTypes.shape({
     isLoading: PropTypes.bool,
     source: PropTypes.string,

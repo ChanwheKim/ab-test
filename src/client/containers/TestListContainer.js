@@ -9,6 +9,7 @@ import {
   displayModal,
   fetchScreenshotUrl,
   loadingScreenshot,
+  addSelectedPage,
 } from '../actions/index';
 
 const mapStateToProps = (state) => {
@@ -63,6 +64,9 @@ const mapDispatchToProps = dispatch => ({
 
     dispatch(fetchScreenshotUrl(screenshot.data));
   },
+  onDashboardIconClick: async (pageId) => {
+    dispatch(addSelectedPage(pageId));
+  }
 });
 
 export default withRouter(connect(

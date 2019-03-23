@@ -1,7 +1,5 @@
-const interval = 100;
-let waiting = false;
-
 window.addEventListener('DOMContentLoaded', () => {
+  console.log('tracking start');
   const url = window.location.href;
 
   const connectEvent = {
@@ -17,7 +15,7 @@ window.addEventListener('DOMContentLoaded', () => {
     method: 'POST',
     credentials: 'include',
     mode: 'no-cors',
-  });
+  }).then(res => console.log('received response'));
 
   document.body.addEventListener('click', (ev) => {
     const isButtonCTA = !!ev.target.closest('.vabt-cta-btn');
@@ -28,7 +26,7 @@ window.addEventListener('DOMContentLoaded', () => {
       y: ev.pageY,
       isButtonCTA,
     };
-
+    console.log('send click event');
     fetch(`http://abtest-env.zui4w2hpdb.ap-northeast-2.elasticbeanstalk.com/api/test-page/${key}?event=${JSON.stringify(clickEvent)}`, {
       headers: {
         'Accept': 'application/json',
@@ -37,7 +35,7 @@ window.addEventListener('DOMContentLoaded', () => {
       method: 'POST',
       credentials: 'include',
       mode: 'no-cors',
-    });
+    }).then(res => console.log('received click event request'));
   });
 });
 
@@ -46,7 +44,7 @@ window.onunload = () => {
     name: 'leave',
   };
 
-  fetch(`http://localhost:8080/api/test-page/${key}?event=${JSON.stringify(event)}`, {
+  fetch(`http://abtest-env.zui4w2hpdb.ap-northeast-2.elasticbeanstalk.com/api/test-page/${key}?event=${JSON.stringify(event)}`, {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',

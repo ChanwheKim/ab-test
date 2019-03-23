@@ -1,3 +1,4 @@
+import axios from 'axios';
 import {
   FETCH_PROJECTS,
   ADD_NEW_PROJECT,
@@ -14,6 +15,8 @@ import {
   FETCH_SCREENSHOT_URL,
   LOADING_SCREENSHOT_SOURCE,
   INITIALIZE_SCREENSHOT_STATE,
+  ADD_SELECTED_PAGE,
+  FETCH_VISIT_INFOS,
 } from './types';
 
 export const fetchProjects = projects => ({
@@ -93,3 +96,32 @@ export const initScreenshotState = () => ({
     source: '',
   },
 });
+
+export const addSelectedPage = pageId => ({
+  type: ADD_SELECTED_PAGE,
+  payload: pageId,
+});
+
+export const fetchVisitInfos = visit => ({
+  type: FETCH_VISIT_INFOS,
+  payload: visit,
+});
+
+export const onDashboardMount = () => async (dispatch, getState) => {
+  const state = getState();
+  const visitIds = state.selectedPages.map((id) => {
+    const page = state.testList.find(list => list._id === id);
+    return page.visitIds;
+  }).flat();
+  let visits;
+
+  try {
+    visits = await Promise.all(
+      visitIds.map(id => axios.get(`/api/project/test-page/visit/${id}`))
+    );
+  } catch (err) {
+    return;
+  }
+
+  dispatch(fetchVisitInfos(visits.map(res => res.data)));
+};

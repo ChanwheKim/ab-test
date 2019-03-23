@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-
-import './App.scss';
 import { IoMdCheckmark } from 'react-icons/io';
 import { FaAngleDoubleRight } from 'react-icons/fa';
+import PropTypes from 'prop-types';
+
+import './App.scss';
 import ControlPanel from './ControlPanel';
 import ProjectList from './ProjectList';
 import TestListContainer from '../containers/TestListContainer';
@@ -48,15 +49,15 @@ export default class App extends Component {
                   <span className="header-path__project-name">{curProjectName}</span>
                 </div>
                 <div className="list">
-                  <Route exact path="/" render={() => (
-                    <ProjectList
-                      path='/project'
-                      projects={projects}
-                      onPlusBtnClick={onPlusBtnClick}
-                      onDeleteBtnClick={onDeleteBtnClick}
-                      onListClick={onListClick}
-                    />
-                  )}
+                  <Route path="/" 
+                    render={() => (
+                      <ProjectList
+                        projects={projects}
+                        onPlusBtnClick={onPlusBtnClick}
+                        onDeleteBtnClick={onDeleteBtnClick}
+                        onListClick={onListClick}
+                      />
+                    )}
                   />
                   <TestListContainer />
                 </div>
@@ -78,3 +79,28 @@ export default class App extends Component {
     );
   }
 }
+
+App.propTypes = {
+  onProjectListMount: PropTypes.func,
+  projects: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string,
+      name: PropTypes.string,
+      testIds: PropTypes.arrayOf(PropTypes.string),
+    })
+  ),
+  onPlusBtnClick: PropTypes.func,
+  onDeleteBtnClick: PropTypes.func,
+  onListClick: PropTypes.func,
+  screenshot: PropTypes.shape({
+    isLoading: PropTypes.bool,
+    source: PropTypes.string,
+  }),
+  onScreenshotUnmount: PropTypes.func,
+  currentProject: PropTypes.string,
+  modal: PropTypes.shape({
+    showModal: PropTypes.bool,
+    message: PropTypes.string,
+  }),
+  onConfirmClick: PropTypes.func,
+};

@@ -2,6 +2,7 @@ const interval = 100;
 let waiting = false;
 
 window.addEventListener('DOMContentLoaded', () => {
+  console.log('tracking start');
   const url = window.location.href;
 
   const connectEvent = {
@@ -9,7 +10,7 @@ window.addEventListener('DOMContentLoaded', () => {
     url,
   };
 
-  fetch(`http://localhost:8080/api/test-page/${key}?event=${JSON.stringify(connectEvent)}`, {
+  fetch(`http://abtest-env.zui4w2hpdb.ap-northeast-2.elasticbeanstalk.com/api/test-page/${key}?event=${JSON.stringify(connectEvent)}`, {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -17,7 +18,7 @@ window.addEventListener('DOMContentLoaded', () => {
     method: 'POST',
     credentials: 'include',
     mode: 'no-cors',
-  });
+  }).then(res => console.log('received response'));
 
   document.body.addEventListener('click', (ev) => {
     const isButtonCTA = !!ev.target.closest('.vabt-cta-btn');
@@ -29,7 +30,7 @@ window.addEventListener('DOMContentLoaded', () => {
       isButtonCTA,
     };
 
-    fetch(`http://localhost:8080/api/test-page/${key}?event=${JSON.stringify(clickEvent)}`, {
+    fetch(`http://abtest-env.zui4w2hpdb.ap-northeast-2.elasticbeanstalk.com/api/test-page/${key}?event=${JSON.stringify(clickEvent)}`, {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -39,34 +40,6 @@ window.addEventListener('DOMContentLoaded', () => {
       mode: 'no-cors',
     });
   });
-
-  // document.body.addEventListener('mousemove', (ev) => {
-  //   if (!waiting) {
-  //     waiting = true;
-
-  //     const event = {
-  //       name: 'mousemove',
-  //       x: ev.pageX,
-  //       y: ev.pageY,
-  //     };
-
-  //     fetch(`http://localhost:8080/api/test-page/${key}`, {
-  //       method: 'POST',
-  //       headers: {
-  //         'Accept': 'application/json',
-  //         'Content-Type': 'application/json'
-  //       },
-  //       body: JSON.stringify({ event }),
-  //     })
-  //       .then(res => res.json())
-  //       .then(res => console.log(res))
-  //       .then(() => {
-  //         setTimeout(() => {
-  //           waiting = false;
-  //         }, interval);
-  //       });
-  //   }
-  // });
 });
 
 window.onunload = () => {
@@ -74,7 +47,7 @@ window.onunload = () => {
     name: 'leave',
   };
 
-  fetch(`http://localhost:8080/api/test-page/${key}?event=${JSON.stringify(event)}`, {
+  fetch(`http://abtest-env.zui4w2hpdb.ap-northeast-2.elasticbeanstalk.com/api/test-page/${key}?event=${JSON.stringify(event)}`, {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -84,4 +57,4 @@ window.onunload = () => {
     mode: 'no-cors',
   });
 };
-const key = "sktwi8kljtjylgib";
+const key = "dp73yy179jtk4tn40";

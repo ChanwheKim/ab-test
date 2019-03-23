@@ -5,6 +5,8 @@ import currentProjectReducer from './currentProjectReducer';
 import modalReducer from './modalReducer';
 import testListLoaderReducer from './testListLoaderReducer';
 import screenshotReducer from './screenshotReducer';
+import selectedPageReducer from './selectedPageReducer';
+import visitInfoReducer from './visitInfoReducer';
 
 export default combineReducers({
   projects: projectReducer,
@@ -13,4 +15,6 @@ export default combineReducers({
   currentProject: currentProjectReducer,
   modal: modalReducer,
   screenshot: screenshotReducer,
+  selectedPages: selectedPageReducer,
+  visits: visitInfoReducer,
 });

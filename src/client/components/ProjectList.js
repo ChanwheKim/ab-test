@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './ProjectList.scss';
 import { IoIosArrowForward, IoMdCheckmark, IoMdClose } from 'react-icons/io';
+import PropTypes from 'prop-types';
 import Modal from './Modal';
 
 class ProjectList extends Component {
@@ -139,3 +140,16 @@ class ProjectList extends Component {
 }
 
 export default ProjectList;
+
+ProjectList.propTypes = {
+  onDeleteBtnClick: PropTypes.func,
+  onListClick: PropTypes.func,
+  onPlusBtnClick: PropTypes.func,
+  projects: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string,
+      name: PropTypes.string,
+      testIds: PropTypes.arrayOf(PropTypes.string),
+    })
+  ),
+};

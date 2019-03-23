@@ -274,4 +274,17 @@ router.get('/test-page/:uniqId/screen-shot', async (req, res, next) => {
   res.send($.html());
 });
 
+router.get('/project/test-page/visit/:visit_id', async (req, res, next) => {
+  const visitId = req.params.visit_id;
+  let visit;
+
+  try {
+    visit = await Visit.findById(visitId);
+  } catch (err) {
+    return next(new GeneralServiceError());
+  }
+
+  res.json(visit);
+});
+
 module.exports = router;

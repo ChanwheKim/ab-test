@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import './TestList.scss';
 import { IoMdClose, IoMdCheckmark, IoMdTv } from 'react-icons/io';
 import { FaCode, FaChartLine, FaSpinner } from 'react-icons/fa';
+import PropTypes from 'prop-types';
+import DashboardContainer from '../containers/DashboardContainer';
 import Modal from './Modal';
 
 class TestList extends Component {
@@ -18,6 +20,7 @@ class TestList extends Component {
 
     this.closeCode = this.closeCode.bind(this);
     this.closeModal = this.closeModal.bind(this);
+    this.handleDashboardIconClick = this.handleDashboardIconClick.bind(this);
     this.handleDeleteBtnClick = this.handleDeleteBtnClick.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -35,7 +38,7 @@ class TestList extends Component {
   }
 
   handleCodeClick(ev) {
-    const id = ev.target.closest('.icon-code').dataset.id;
+    const { id } = ev.target.closest('.icon-code').dataset;
 
     if (!id) {
       return;
@@ -46,14 +49,12 @@ class TestList extends Component {
     });
   }
 
-  handleInputChange(ev) {
-    this.setState({ name: ev.target.value });
-  }
+  handleDashboardIconClick(ev) {
+    const pageId = ev.target.closest('.icon-dashboard').dataset.id;
 
-  handleKeyDown(ev) {
-    if (ev.keyCode === 13) {
-      this.handleSubmit();
-    }
+    this.props.onDashboardIconClick(pageId);
+
+    this.props.history.push('/testlist/dashboard');
   }
 
   handleDeleteBtnClick(ev) {
@@ -64,6 +65,16 @@ class TestList extends Component {
     }
 
     this.props.onDeleteBtnClick(id);
+  }
+
+  handleInputChange(ev) {
+    this.setState({ name: ev.target.value });
+  }
+
+  handleKeyDown(ev) {
+    if (ev.keyCode === 13) {
+      this.handleSubmit();
+    }
   }
 
   handleSubmit() {
@@ -131,7 +142,12 @@ class TestList extends Component {
         <div className="test-list__item--icons">
           <FaCode size={20} className="icon-code" data-id={test._id} onClick={this.handleCodeClick} />
           <IoMdTv size={20} className="icon" data-uniqid={test.uniqId} onClick={this.handleScreenIconClick} />
-          <FaChartLine className="icon" size={20} />
+          <FaChartLine
+            className="icon-dashboard"
+            size={20}
+            onClick={this.handleDashboardIconClick}
+            data-id={test._id}
+          />
           <IoMdClose
             size={20}
             className="icon test-list__btn-delete"
@@ -145,6 +161,10 @@ class TestList extends Component {
 
   render() {
     const test = this.props.testList.find(item => item._id === this.state.selectedListId);
+
+    if (this.props.location.pathname === '/testlist/dashboard') {
+      return <DashboardContainer />;
+    }
 
     return (
       <ul className="test-list">
@@ -207,3 +227,22 @@ class TestList extends Component {
 }
 
 export default TestList;
+
+TestList.propTypes = {
+  onDeleteBtnClick: PropTypes.func,
+  onDashboardIconClick: PropTypes.func,
+  currentProject: PropTypes.string,
+  onPlusBtnClick: PropTypes.func,
+  displayScreenshot: PropTypes.func,
+  testList: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      conversion: PropTypes.number,
+      revisit_count: PropTypes.number,
+      visit_count: PropTypes.number,
+      visitIds: PropTypes.arrayOf(PropTypes.string),
+      _id: PropTypes.string,
+      uniqId: PropTypes.string,
+    })
+  )
+};
