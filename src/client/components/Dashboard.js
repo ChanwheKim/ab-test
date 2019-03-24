@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import './Dashboard.scss';
 import LineChart from './charts/LineChart';
+import BarChart from './charts/BarChart';
 
 class Dashboard extends Component {
   componentDidMount() {
@@ -12,7 +13,11 @@ class Dashboard extends Component {
   render() {
     return (
       <div className="dashboard">
-        <LineChart data={this.props.dataset} width={500} height={300} />
+        <div className="dashboard--control-panel"></div>
+        <div className="dashboard__first-row">
+          <LineChart className="dashboard--visitor-chart" data={this.props.dataset} width={500} height={300} />
+          <BarChart data={this.props.pages} width={500} height={300} />
+        </div>
       </div>
     );
   }
@@ -33,4 +38,5 @@ Dashboard.propTypes = {
       ),
     })
   ),
+  pages: PropTypes.array,
 };

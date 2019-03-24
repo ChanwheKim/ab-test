@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { BrowserRouter as Router, Link } from 'react-router-dom';
 import './ProjectList.scss';
 import { IoIosArrowForward, IoMdCheckmark, IoMdClose } from 'react-icons/io';
 import PropTypes from 'prop-types';
@@ -20,7 +21,7 @@ class ProjectList extends Component {
     this.closeModal = this.closeModal.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleDeleteBtnClick = this.handleDeleteBtnClick.bind(this);
+    this.handleClick = this.handleClick.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleOriginInputChange = this.handleOriginInputChange.bind(this);
   }
@@ -29,7 +30,7 @@ class ProjectList extends Component {
     this.setState({ showModal: false });
   }
 
-  handleDeleteBtnClick(ev) {
+  handleClick(ev) {
     const { id } = ev.currentTarget;
     const deleteBtn = ev.target.closest('.project__list--btn-delete');
 
@@ -80,11 +81,13 @@ class ProjectList extends Component {
 
   renderList() {
     return this.props.projects.map(item => (
-      <li key={item._id} className="project__list" id={item._id} onClick={this.handleDeleteBtnClick}>
-        <IoIosArrowForward size={15} className="project__list--icon-arrow" />
-        <IoMdClose size={17} className="project__list--btn-delete" />
-        <span className="project__list--name">{item.name}</span>
-      </li>
+      <Link to="/" key={item._id}>
+        <li className="project__list" id={item._id} onClick={this.handleClick}>
+          <IoIosArrowForward size={15} className="project__list--icon-arrow" />
+          <IoMdClose size={17} className="project__list--btn-delete" />
+          <span className="project__list--name">{item.name}</span>
+        </li>
+      </Link>
     ));
   }
 

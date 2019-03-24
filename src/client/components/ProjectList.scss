@@ -20,7 +20,10 @@
     cursor: pointer;
     position: relative;
     background-color: #eaeaea;
-    
+
+    &:hover {
+      color: rgb(58, 163, 242);
+    }
 
     a {
       text-decoration: none;
@@ -43,10 +46,6 @@
 
     &--name {
       transition: all .2s;
-
-      &:hover {
-        color: rgb(58, 163, 242);
-      }
     }
 
     &--name {
@@ -158,4 +157,9 @@
   font-size: 1.7rem;
   margin-bottom: 1.7rem;
   letter-spacing: 1px;
+}
+
+a {
+  text-decoration: none;
+  color: rgba(0, 0, 0, 0.84);
 }

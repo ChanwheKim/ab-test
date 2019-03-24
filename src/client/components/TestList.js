@@ -112,51 +112,56 @@ class TestList extends Component {
 
     const project = this.props.projects.find(item => item._id === this.props.currentProject);
 
-    return this.props.testList.map((test, idx) => (
-      <li key={test._id} className="test-list__item">
-        <div className="test-list__item--name">
-          <span className="project-name">{project.name}</span>
-          &#47;
-          <span className="test-name">{test.name}</span>
-        </div>
-        <div className="test-list__item--visitor">
-          <span className="label">Visit</span>
-          <span className="count">{test.visitIds.length}</span>
-        </div>
-        <div className="test-list__item--revisitor">
-          <span className="label">Revisit</span>
-          <span className="count">{test.revisit_count}</span>
-        </div>
-        <div className="test-list__item--revisit-rate">
-          <span className="label">Revisit rate</span>
-          <span className="count">{((test.revisit_count / test.visit_count) * 100).toFixed(2)}%</span>
-        </div>
-        <div className="test-list__item--conversion">
-          <span className="label">Conversion</span>
-          <span className="count">{test.conversion}</span>
-        </div>
-        <div className="test-list__item--rate">
-          <span className="label">Conversion rate</span>
-          <span className="count">{((test.conversion / test.visitIds.length) * 100).toFixed(2)}%</span>
-        </div>
-        <div className="test-list__item--icons">
-          <FaCode size={20} className="icon-code" data-id={test._id} onClick={this.handleCodeClick} />
-          <IoMdTv size={20} className="icon" data-uniqid={test.uniqId} onClick={this.handleScreenIconClick} />
-          <FaChartLine
-            className="icon-dashboard"
-            size={20}
-            onClick={this.handleDashboardIconClick}
-            data-id={test._id}
-          />
-          <IoMdClose
-            size={20}
-            className="icon test-list__btn-delete"
-            id={test._id}
-            onClick={this.handleDeleteBtnClick}
-          />
-        </div>
-      </li>
-    ));
+    return this.props.testList.map((test, idx) => {
+      const revisitRate = ((test.revisit_count / test.visit_count) * 100) || 0;
+      const conversionRate = ((test.conversion / test.visitIds.length) * 100) || 0;
+
+      return (
+        <li key={test._id} className="test-list__item">
+          <div className="test-list__item--name">
+            <span className="project-name">{project.name}</span>
+            &#47;
+            <span className="test-name">{test.name}</span>
+          </div>
+          <div className="test-list__item--visitor">
+            <span className="label">Visit</span>
+            <span className="count">{test.visitIds.length}</span>
+          </div>
+          <div className="test-list__item--revisitor">
+            <span className="label">Revisit</span>
+            <span className="count">{test.revisit_count}</span>
+          </div>
+          <div className="test-list__item--revisit-rate">
+            <span className="label">Revisit rate</span>
+            <span className="count">{revisitRate.toFixed(2)}%</span>
+          </div>
+          <div className="test-list__item--conversion">
+            <span className="label">Conversion</span>
+            <span className="count">{test.conversion}</span>
+          </div>
+          <div className="test-list__item--rate">
+            <span className="label">Conversion rate</span>
+            <span className="count">{conversionRate.toFixed(2)}%</span>
+          </div>
+          <div className="test-list__item--icons">
+            <FaCode size={20} className="icon-code" data-id={test._id} onClick={this.handleCodeClick} />
+            <IoMdTv size={20} className="icon" data-uniqid={test.uniqId} onClick={this.handleScreenIconClick} />
+            <FaChartLine
+              className="icon-dashboard"
+              size={20}
+              onClick={this.handleDashboardIconClick}
+              data-id={test._id}
+            />
+            <IoMdClose
+              size={20}
+              className="icon test-list__btn-delete"
+              id={test._id}
+              onClick={this.handleDeleteBtnClick}
+            />
+          </div>
+        </li>
+      );
+    });
   }
 
   render() {
@@ -186,12 +191,12 @@ class TestList extends Component {
           this.renderTestList()
         }
         {
-          this.state.selectedListId &&
+          (this.state.selectedListId && test) &&
           <div className="code">
             <div className="code-snippet-wrapper">
               <pre className="code-snippet">
-                <span className="code-snippet__green">{'<script'} </span><span className="code-snippet__white">{'type='}</span>{'"text/javascript" '}<span className="code-snippet__white">{'src='}</span>{'"http://localhost:8080/api/test-page/source-file?key='}{test.uniqId}<span className="code-snippet__green">{'"></script>'}</span>
-                <p className="code-label">{'<script type="text/javascript" src="http://localhost:8080/api/test-page/source-file?key='}{test.uniqId}{'"></script>'}</p>
+                <span className="code-snippet__green">{'<script'} </span><span className="code-snippet__white">{'type='}</span>{'"text/javascript" '}<span className="code-snippet__white">{'src='}</span>{'"http://abtest-env.zui4w2hpdb.ap-northeast-2.elasticbeanstalk.com/api/test-page/source-file?key='}{test.uniqId}<span className="code-snippet__green">{'"></script>'}</span>
+                <p className="code-label">{'<script type="text/javascript" src="http://abtest-env.zui4w2hpdb.ap-northeast-2.elasticbeanstalk.com/api/test-page/source-file?key='}{test.uniqId}{'"></script>'}</p>
               </pre>
             </div>
             <div className="btn-close-code" onClick={this.closeCode}>Close</div>

@@ -5,11 +5,14 @@ const cookieSession = require('cookie-session');
 const index = require('./routes/index');
 const { NotFoundError } = require('./lib/error');
 const bodyParser = require('body-parser');
+const useragent = require('express-useragent');
+
 
 const app = express();
 
 app.use(compression());
 app.use(cookieParser());
+app.use(useragent.express());
 
 app.use(
   cookieSession({

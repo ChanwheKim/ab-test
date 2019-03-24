@@ -16,7 +16,9 @@ import {
   LOADING_SCREENSHOT_SOURCE,
   INITIALIZE_SCREENSHOT_STATE,
   ADD_SELECTED_PAGE,
-  FETCH_VISIT_INFOS,
+  REMOVE_SELECTED_PAGE,
+  FETCH_VISIT_INFO,
+  LOADING_VISIT_INFO,
 } from './types';
 
 export const fetchProjects = projects => ({
@@ -102,9 +104,19 @@ export const addSelectedPage = pageId => ({
   payload: pageId,
 });
 
+export const removeSelectedPage = () => ({
+  type: REMOVE_SELECTED_PAGE,
+  payload: [],
+});
+
 export const fetchVisitInfos = visit => ({
-  type: FETCH_VISIT_INFOS,
+  type: FETCH_VISIT_INFO,
   payload: visit,
+});
+
+export const LoadingVisitInfo = () => ({
+  type: LOADING_VISIT_INFO,
+  payload: true,
 });
 
 export const onDashboardMount = () => async (dispatch, getState) => {

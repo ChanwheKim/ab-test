@@ -177,6 +177,7 @@ router.get('/test-page/source-file', (req, res, next) => {
 router.post('/test-page/:uniqId', async (req, res, next) => {
   const { uniqId } = req.params;
   const event = JSON.parse(req.query.event);
+  const ip = req.query.ip || req.connection.remoteAddress;
   const { visitId } = req.cookies;
   let visit;
   let testPage;
@@ -197,14 +198,19 @@ router.post('/test-page/:uniqId', async (req, res, next) => {
       testPage.revisit_count++;
     }
 
-    const geo = geoip.lookup(req.connection.remoteAddress);
+    const geo = geoip.lookup(ip);
+    const useragent = {
+      isMobile: req.useragent.isMobile,
+      browser: req.useragent.browser,
+    };
 
     try {
       visit = await new Visit({
         geo,
-        ip: req.connection.remoteAddress,
+        ip,
         connected_at: new Date(),
         left_at: '',
+        useragent,
       }).save();
     } catch (err) {
       return next(GeneralServiceError());

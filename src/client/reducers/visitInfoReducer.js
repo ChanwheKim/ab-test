@@ -1,8 +1,12 @@
-import { FETCH_VISIT_INFOS } from '../actions/types';
+import { FETCH_VISIT_INFO, LOADING_VISIT_INFO } from '../actions/types';
 
-export default function modalReducer(state = {}, action) {
+const initialState = {
+  isLoading: false,
+};
+
+export default function modalReducer(state = initialState, action) {
   switch (action.type) {
-    case FETCH_VISIT_INFOS:
+    case FETCH_VISIT_INFO:
       const visits = action.payload.reduce((list, visit) => {
         if (!list[visit._id]) {
           list[visit._id] = visit;
@@ -11,7 +15,14 @@ export default function modalReducer(state = {}, action) {
         return list;
       }, {});
 
+      visits.isLoading = false;
+
       return visits;
+    case LOADING_VISIT_INFO:
+      return {
+        ...state,
+        isLoading: action.payload,
+      };
     default:
       return state;
   }

@@ -10,6 +10,7 @@ import {
   fetchScreenshotUrl,
   loadingScreenshot,
   addSelectedPage,
+  LoadingVisitInfo,
 } from '../actions/index';
 
 const mapStateToProps = (state) => {
@@ -65,6 +66,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(fetchScreenshotUrl(screenshot.data));
   },
   onDashboardIconClick: async (pageId) => {
+    dispatch(LoadingVisitInfo());
     dispatch(addSelectedPage(pageId));
   }
 });

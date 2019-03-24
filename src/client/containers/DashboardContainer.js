@@ -9,7 +9,7 @@ const mapStateToProps = (state) => {
     pageId => state.testList.find(test => test._id === pageId)
   );
 
-  const dataset = Object.values(state.visits).length && pages.map((page) => {
+  const dataset = !state.visits.isLoading && pages.map((page) => {
     const pageData = {
       name: page.name,
       visits: [],
@@ -29,6 +29,7 @@ const mapStateToProps = (state) => {
 
       return visitInfo;
     }, {});
+
     pageData.visits.push(Object.values(countedVisit));
     pageData.visits = pageData.visits.flat();
     return pageData;
@@ -36,6 +37,7 @@ const mapStateToProps = (state) => {
 
   return {
     dataset: dataset || [],
+    pages,
   };
 };
 

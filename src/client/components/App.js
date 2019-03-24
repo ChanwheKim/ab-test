@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { IoMdCheckmark } from 'react-icons/io';
 import { FaAngleDoubleRight } from 'react-icons/fa';
@@ -22,7 +22,7 @@ export default class App extends Component {
       onPlusBtnClick,
       onDeleteBtnClick,
       onListClick,
-      screenshot,
+      screenCapture,
       onScreenshotUnmount,
       currentProject,
     } = this.props;
@@ -35,45 +35,48 @@ export default class App extends Component {
           <Route
             path="/screenshot"
             render={() => (
-              <Screenshot screenshot={screenshot} onUnmount={onScreenshotUnmount} />
+              <Screenshot screenshot={screenCapture} onUnmount={onScreenshotUnmount} />
             )}
           />
-          <div className="app">
-            <header className="header" />
-            <div className="app-main">
-              <ControlPanel />
-              <div className="content-wrapper">
-                <div className="header-path">
-                  <span className="header-path__project-label">Project</span>
-                  <FaAngleDoubleRight className="header-path__icon-arrow" size={15} />
-                  <span className="header-path__project-name">{curProjectName}</span>
-                </div>
-                <div className="list">
-                  <Route path="/" 
-                    render={() => (
-                      <ProjectList
-                        projects={projects}
-                        onPlusBtnClick={onPlusBtnClick}
-                        onDeleteBtnClick={onDeleteBtnClick}
-                        onListClick={onListClick}
-                      />
-                    )}
-                  />
-                  <TestListContainer />
+          <Fragment>
+            <div className="app">
+              <header className="header" />
+              <div className="app-main">
+                <ControlPanel />
+                <div className="content-wrapper">
+                  <div className="header-path">
+                    <span className="header-path__project-label">Project</span>
+                    <FaAngleDoubleRight className="header-path__icon-arrow" size={15} />
+                    <span className="header-path__project-name">{curProjectName}</span>
+                  </div>
+                  <div className="list">
+                    <Route
+                      path="/"
+                      render={() => (
+                        <ProjectList
+                          projects={projects}
+                          onPlusBtnClick={onPlusBtnClick}
+                          onDeleteBtnClick={onDeleteBtnClick}
+                          onListClick={onListClick}
+                        />
+                      )}
+                    />
+                    <TestListContainer />
+                  </div>
                 </div>
               </div>
+              {
+                this.props.modal.showModal &&
+                <Modal>
+                  <span className="modal-message">{this.props.modal.message}</span>
+                  <div className="btn btn-agree" onClick={this.props.onConfirmClick}>
+                    <IoMdCheckmark size={20} />
+                    <span>Confirm</span>
+                  </div>
+                </Modal>
+              }
             </div>
-            {
-              this.props.modal.showModal &&
-              <Modal>
-                <span className="modal-message">{this.props.modal.message}</span>
-                <div className="btn btn-agree" onClick={this.props.onConfirmClick}>
-                  <IoMdCheckmark size={20} />
-                  <span>Confirm</span>
-                </div>
-              </Modal>
-            }
-          </div>
+          </Fragment>
         </Switch>
       </Router>
     );
@@ -92,7 +95,7 @@ App.propTypes = {
   onPlusBtnClick: PropTypes.func,
   onDeleteBtnClick: PropTypes.func,
   onListClick: PropTypes.func,
-  screenshot: PropTypes.shape({
+  screenCapture: PropTypes.shape({
     isLoading: PropTypes.bool,
     source: PropTypes.string,
   }),
