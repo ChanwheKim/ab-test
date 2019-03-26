@@ -10,9 +10,9 @@ class LineChart extends Component {
     this.svgRef = React.createRef();
   }
 
-  componentDidUpdate() {
+  componentDidMount() {
     const { width, height, data } = this.props;
-    const margin = 50;
+    const margin = 30;
     const duration = 250;
 
     const lineOpacity = '0.25';
@@ -54,8 +54,9 @@ class LineChart extends Component {
     const lines = svg.append('g')
       .attr('class', 'lines');
 
-    lines.selectAll('.line-group')
-      .data(data).enter()
+    const newLines = lines.selectAll('.line-group').data(data);
+
+    newLines.enter()
       .append('g')
       .attr('class', 'line-group')
       .on('mouseover', (d, i) => {
@@ -95,8 +96,13 @@ class LineChart extends Component {
           .style('cursor', 'none');
       });
 
-    lines.selectAll('circle-group')
-      .data(data).enter()
+    svg.selectAll('path').exit().remove();
+
+    newLines.exit().remove();
+
+    const lineDraw = lines.selectAll('circle-group').data(data);
+
+    lineDraw.enter()
       .append('g')
       .style('fill', (d, i) => color(i))
       .selectAll('circle')
@@ -138,6 +144,10 @@ class LineChart extends Component {
           .duration(duration)
           .attr('r', circleRadius);
       });
+
+    svg.selectAll('.lines').exit().remove();
+    svg.selectAll('.line').exit().remove();
+    lineDraw.exit().remove();
 
     const xAxis = d3.axisBottom(xScale).ticks(5);
     const yAxis = d3.axisLeft(yScale).ticks(10);

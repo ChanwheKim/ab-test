@@ -15,8 +15,6 @@ import {
   FETCH_SCREENSHOT_URL,
   LOADING_SCREENSHOT_SOURCE,
   INITIALIZE_SCREENSHOT_STATE,
-  ADD_SELECTED_PAGE,
-  REMOVE_SELECTED_PAGE,
   FETCH_VISIT_INFO,
   LOADING_VISIT_INFO,
 } from './types';
@@ -99,33 +97,24 @@ export const initScreenshotState = () => ({
   },
 });
 
-export const addSelectedPage = pageId => ({
-  type: ADD_SELECTED_PAGE,
-  payload: pageId,
-});
-
-export const removeSelectedPage = () => ({
-  type: REMOVE_SELECTED_PAGE,
-  payload: [],
-});
-
 export const fetchVisitInfos = visit => ({
   type: FETCH_VISIT_INFO,
   payload: visit,
 });
 
-export const LoadingVisitInfo = () => ({
+export const loadingVisitInfo = () => ({
   type: LOADING_VISIT_INFO,
   payload: true,
 });
 
 export const onDashboardMount = () => async (dispatch, getState) => {
   const state = getState();
-  const visitIds = state.selectedPages.map((id) => {
-    const page = state.testList.find(list => list._id === id);
-    return page.visitIds;
-  }).flat();
+  let visitIds = state.testList.map(page => page.visitIds).flat();
   let visits;
+
+  visitIds = visitIds.filter(id => state.visits[id] === undefined);
+
+  dispatch(loadingVisitInfo());
 
   try {
     visits = await Promise.all(

@@ -14,7 +14,6 @@ import {
   removeTestListLoader,
   initScreenshotState,
   removeCurrentProjectId,
-  removeSelectedPage,
 } from '../actions/index';
 
 const mapStateToProps = ({ projects, modal, screenshot, currentProject }) => ({
@@ -66,7 +65,6 @@ const mapDispatchToProps = dispatch => ({
   onListClick: async (projectId) => {
     let testList;
 
-    dispatch(removeSelectedPage());
     dispatch(setCurrentProjectID(projectId));
     dispatch(displayTestListLoader());
 

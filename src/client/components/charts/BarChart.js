@@ -12,7 +12,7 @@ class BarChart extends Component {
 
   componentDidUpdate() {
     const { data } = this.props;
-    const margin = { top: 40, right: 20, bottom: 50, left: 40 };
+    const margin = { top: 40, right: 15, bottom: 50, left: 15 };
     const { width, height } = this.props;
 
     data.forEach((page) => {

@@ -5,39 +5,63 @@ import * as actions from '../actions';
 import Dashboard from '../components/Dashboard';
 
 const mapStateToProps = (state) => {
-  const pages = state.selectedPages.map(
-    pageId => state.testList.find(test => test._id === pageId)
-  );
+  const visitDataset = [];
+  const visitByRegion = {};
+  const pages = state.testList.map(page => ({
+    name: page.name,
+    id: page._id,
+    visit_count: page.visit_count,
+    conversion: page.conversion,
+  }));
 
-  const dataset = !state.visits.isLoading && pages.map((page) => {
+  state.testList.forEach((page) => {
     const pageData = {
       name: page.name,
       visits: [],
     };
+    const visitByDate = {};
 
-    const countedVisit = page.visitIds.reduce((visitInfo, id) => {
-      const date = new Date(state.visits[id].connected_at).toDateString();
+    page.visitIds.forEach((id) => {
+      const visit = state.visits[id];
 
-      if (!visitInfo[date]) {
-        visitInfo[date] = {
-          count: 1,
-          date: new Date(new Date(state.visits[id].connected_at).toDateString()),
-        };
-      } else {
-        visitInfo[date].count++;
+      if (!visit) {
+        return;
       }
 
-      return visitInfo;
-    }, {});
+      const date = new Date(visit.connected_at).toDateString();
 
-    pageData.visits.push(Object.values(countedVisit));
+      if (!visitByDate[date]) {
+        visitByDate[date] = {
+          count: 1,
+          date: new Date(new Date(visit.connected_at).toDateString()),
+        };
+      } else {
+        visitByDate[date].count++;
+      }
+
+      if (visitByRegion[visit.geo.city]) {
+        visitByRegion[visit.geo.city].count++;
+      } else {
+        visitByRegion[visit.geo.city] = {
+          name: visit.geo.city,
+          count: 1,
+          ll: visit.geo.ll.reverse(),
+          key: visit._id,
+        };
+      }
+    });
+
+    pageData.visits.push(Object.values(visitByDate));
     pageData.visits = pageData.visits.flat();
-    return pageData;
+    visitDataset.push(pageData);
   });
 
   return {
-    dataset: dataset || [],
+    fixedPage: state.fixedPage,
+    visitDataset,
+    isVisitLoading: state.visits.isLoading,
     pages,
+    dataByRegion: Object.values(visitByRegion),
   };
 };
 

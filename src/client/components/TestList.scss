@@ -32,19 +32,36 @@
 
     &--name {
       display: flex;
-      flex-direction: row;
-      align-items: center;
-      width: 35%;
+      flex-direction: column;
       border-right: 1px solid rgba(0,0,0,0.1);
-      height: 100%;
-      flex-grow: 1;
+      width: 35%;
 
-      & .project-name {
-        margin-right: 1.5rem;
+      & .name-label {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        height: 100%;
+        flex-grow: 1;
+        margin-bottom: 1rem;
+  
+        & .project-name {
+          margin-right: 1.5rem;
+        }
+  
+        & .test-name {
+          margin-left: 1.5rem;
+        }
       }
 
-      & .test-name {
-        margin-left: 1.5rem;
+      & .test-uri {
+        text-align: left;
+        font-size: 1.2rem;
+        color: rgba(#212121, .7);
+
+        &:hover {
+          color: rgb(58, 163, 242);
+        }
       }
     }
 

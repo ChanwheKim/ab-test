@@ -194,7 +194,7 @@ router.post('/test-page/:uniqId', async (req, res, next) => {
   }
 
   if (event.name === 'connect') {
-    if (visitId) {
+    if (visitId && testPage.revisit_count) {
       testPage.revisit_count++;
     }
 

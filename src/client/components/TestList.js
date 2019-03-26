@@ -52,7 +52,7 @@ class TestList extends Component {
   handleDashboardIconClick(ev) {
     const pageId = ev.target.closest('.icon-dashboard').dataset.id;
 
-    this.props.onDashboardIconClick(pageId);
+    // this.props.onDashboardIconClick(pageId);
 
     this.props.history.push('/testlist/dashboard');
   }
@@ -119,9 +119,12 @@ class TestList extends Component {
       return (
         <li key={test._id} className="test-list__item">
           <div className="test-list__item--name">
-            <span className="project-name">{project.name}</span>
-            &#47;
-            <span className="test-name">{test.name}</span>
+            <div className="name-label">
+              <span className="project-name">{project.name}</span>
+              &#47;
+              <span className="test-name">{test.name}</span>
+            </div>
+            <a href={test.url} className="test-uri" target="_blank" rel="noopener noreferrer">{test.url}</a>
           </div>
           <div className="test-list__item--visitor">
             <span className="label">Visit</span>
@@ -166,6 +169,7 @@ class TestList extends Component {
 
   render() {
     const test = this.props.testList.find(item => item._id === this.state.selectedListId);
+    const loading = this.props.isLoading && this.props.testList.length === 0;
 
     if (this.props.location.pathname === '/testlist/dashboard') {
       return <DashboardContainer />;
@@ -182,7 +186,7 @@ class TestList extends Component {
           Add a test page
         </button>
         {
-          this.props.isLoading &&
+          loading &&
           <div className="loader-background">
             <FaSpinner className="test-list__loader" size={37} />
           </div>

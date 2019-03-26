@@ -7,13 +7,14 @@ const initialState = {
 export default function modalReducer(state = initialState, action) {
   switch (action.type) {
     case FETCH_VISIT_INFO:
+      const prevState = JSON.parse(JSON.stringify(state));
       const visits = action.payload.reduce((list, visit) => {
         if (!list[visit._id]) {
           list[visit._id] = visit;
         }
 
         return list;
-      }, {});
+      }, { ...prevState });
 
       visits.isLoading = false;
 

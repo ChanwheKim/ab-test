@@ -9,7 +9,6 @@ import {
   displayModal,
   fetchScreenshotUrl,
   loadingScreenshot,
-  addSelectedPage,
   LoadingVisitInfo,
 } from '../actions/index';
 
@@ -67,7 +66,8 @@ const mapDispatchToProps = dispatch => ({
   },
   onDashboardIconClick: async (pageId) => {
     dispatch(LoadingVisitInfo());
-    dispatch(addSelectedPage(pageId));
+    // dispatch(setFixedPage(pageId));
+    // dispatch(addSelectedPage(pageId));
   }
 });
 
