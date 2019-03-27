@@ -42,7 +42,7 @@ class ProjectList extends Component {
       return this.props.onListClick(id);
     }
 
-    this.props.onDeleteBtnClick(id);
+    // this.props.onDeleteBtnClick(id);
   }
 
   handleInputChange(ev) {

@@ -2,11 +2,10 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
 const cookieSession = require('cookie-session');
-const index = require('./routes/index');
-const { NotFoundError } = require('./lib/error');
 const bodyParser = require('body-parser');
 const useragent = require('express-useragent');
-
+const index = require('./routes/index');
+const { NotFoundError } = require('./lib/error');
 
 const app = express();
 
@@ -44,6 +43,10 @@ app.use((req, res, next) => {
 
 app.use((err, req, res, next) => {
   res.status(err.state || 500);
+
+  if (err.status === 404) {
+    return res.redirect('/');
+  }
 
   res.json(new NotFoundError());
 });

@@ -52,8 +52,6 @@ class TestList extends Component {
   handleDashboardIconClick(ev) {
     const pageId = ev.target.closest('.icon-dashboard').dataset.id;
 
-    // this.props.onDashboardIconClick(pageId);
-
     this.props.history.push('/testlist/dashboard');
   }
 
@@ -239,7 +237,6 @@ export default TestList;
 
 TestList.propTypes = {
   onDeleteBtnClick: PropTypes.func,
-  onDashboardIconClick: PropTypes.func,
   currentProject: PropTypes.string,
   onPlusBtnClick: PropTypes.func,
   displayScreenshot: PropTypes.func,

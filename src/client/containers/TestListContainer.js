@@ -9,7 +9,6 @@ import {
   displayModal,
   fetchScreenshotUrl,
   loadingScreenshot,
-  LoadingVisitInfo,
 } from '../actions/index';
 
 const mapStateToProps = (state) => {
@@ -64,9 +63,6 @@ const mapDispatchToProps = dispatch => ({
 
     dispatch(fetchScreenshotUrl(screenshot.data));
   },
-  onDashboardIconClick: async (pageId) => {
-    dispatch(LoadingVisitInfo());
-  }
 });
 
 export default withRouter(connect(

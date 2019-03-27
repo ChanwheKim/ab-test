@@ -4,6 +4,7 @@ import { IoIosArrowDown } from 'react-icons/io';
 import { FaSpinner } from 'react-icons/fa';
 
 import './Dashboard.scss';
+import ReactCountryFlag from 'react-country-flag';
 import LineChart from './charts/LineChart';
 import BarChart from './charts/BarChart';
 import WorldMap from './charts/WorldMap';
@@ -17,11 +18,43 @@ class Dashboard extends Component {
       showPageBox: false,
     };
 
+    this.convertMillsecToLabel = this.convertMillsecToLabel.bind(this);
     this.togglePageBox = this.togglePageBox.bind(this);
+    this.renderCountryList = this.renderCountryList.bind(this);
   }
 
   componentDidMount() {
     this.props.onDashboardMount();
+  }
+
+  convertMillsecToLabel() {
+    const average = this.props.stayOnPages.reduce((acc, time, idx) => {
+      acc += time;
+
+      if (idx === this.props.stayOnPages.length - 1) {
+        return acc / this.props.stayOnPages.length;
+      }
+
+      return acc;
+    });
+
+    let min = parseInt((average / (1000 * 60)).toString().split('.'));
+    let sec = parseInt(((average % (1000 * 60)) / 1000).toString().split('.'));
+
+    min = min ? `${min} min` : '';
+    sec = sec ? `${sec} sec` : '';
+
+    return (`${min} ${sec}`).trim();
+  }
+
+  renderCountryList() {
+    return this.props.countries.map(country => (
+      <li className="dashboard__country--list" key={country.name}>
+        <ReactCountryFlag code={`${country.name}`} className="country-flag" />
+        <span className="country-name">{country.name}</span>
+        <span>{country.value} %</span>
+      </li>
+    ));
   }
 
   togglePageBox() {
@@ -59,47 +92,75 @@ class Dashboard extends Component {
         </div>
         <div className="dashboard__row">
           {
-            this.props.isVisitLoading
-              ?
-              (
-                <div className="dashboard__row--loader-wrapper">
-                  <FaSpinner size={19} className="loader" />
-                </div>
-              )
-              :
-              (
-                <div className="dashboard__chart-wrapper">
-                  <div className="dashboard__chart-label">Visitors by date</div>
-                  <LineChart className="dashboard--visitor-chart" data={this.props.visitDataset} width={400} height={200} />
-                </div>
-              )
+            this.props.isVisitLoading ?
+              <div className="dashboard__row--loader-wrapper">
+                <FaSpinner size={19} className="loader" />
+              </div> :
+              <div className="dashboard__chart-wrapper">
+                <div className="dashboard__chart-label">Visitors by date</div>
+                <LineChart className="dashboard--visitor-chart" data={this.props.visitDataset} width={400} height={200} />
+              </div>
           }
           <div className="dashboard__chart-wrapper">
             <div className="dashboard__chart-label">Conversion rate</div>
             <BarChart data={this.props.pages} width={400} height={200} />
           </div>
-          <div className="dashboard__chart-wrapper donut">
-            <div className="dashboard__chart-label">Visit by browser</div>
-            <DonutChart width={200} height={200} data={this.props.useragent} />
-          </div>
+          {
+            this.props.isVisitLoading ?
+              <div className="dashboard__row--loader-wrapper donut">
+                <FaSpinner size={19} className="loader" />
+              </div> :
+              <div className="dashboard__chart-wrapper donut">
+                <div className="dashboard__chart-label">Visit by browser</div>
+                <DonutChart width={200} height={200} data={this.props.useragent} />
+              </div>
+          }
         </div>
         <div className="dashboard__row">
           <div className="dashboard__column">
-            <div className="dashboard__chart-wrapper">
-              <div className="dashboard__chart-label">AVG. time on pages</div>
-              <div className="average-time-label">
-                <span className="time">1:02</span>
-                <span className="criteria">min</span>
+            {
+              this.props.isVisitLoading ?
+              <div className="dashboard__row--loader-wrapper time">
+                <FaSpinner size={19} className="loader" />
+              </div> :
+              <div className="dashboard__chart-wrapper">
+                <div className="dashboard__chart-label">AVG. time on pages</div>
+                <div className="average-time-label">
+                  <span className="time">
+                    {
+                      this.props.stayOnPages.length !== 0 &&
+                      this.convertMillsecToLabel()
+                    }
+                  </span>
+                </div>
               </div>
-            </div>
+            }
             <div className="dashboard__chart-wrapper">
-              <div className="dashboard__chart-label">Revisit rate</div>
+              <div className="dashboard__chart-label">Total Revisit rate</div>
+              <div className="average-revisit-label">
+                <span className="revisit">{this.props.revisitRate}</span>
+                <span className="criteria">%</span>
+              </div>
             </div>
           </div>
           <div className="dashboard__chart-wrapper">
             <div className="dashboard__chart-label">Approx location of client</div>
             <WorldMap data={this.props.dataByRegion} />
           </div>
+          {
+            this.props.isVisitLoading ?
+              <div className="dashboard__row--loader-wrapper country">
+                <FaSpinner size={19} className="loader" />
+              </div> :
+              <div className="dashboard__chart-wrapper">
+                <div className="dashboard__chart-label">Visit by country</div>
+                <ul className="dashboard__country">
+                  {
+                    this.renderCountryList()
+                  }
+                </ul>
+              </div>
+          }
         </div>
       </div>
     );
@@ -124,4 +185,18 @@ Dashboard.propTypes = {
   pages: PropTypes.array,
   dataByRegion: PropTypes.array,
   isVisitLoading: PropTypes.bool,
+  revisitRate: PropTypes.string,
+  stayOnPages: PropTypes.array,
+  countries: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      value: PropTypes.string,
+    })
+  ),
+  useragent: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.number,
+      name: PropTypes.string,
+    })
+  ),
 };

@@ -13,6 +13,8 @@ const Test = require('../models/Test');
 const Visit = require('../models/Visit');
 const { GeneralServiceError, WrongEntityError } = require('../lib/error');
 
+const request = require('request-promise-native');
+
 const router = express.Router();
 mongoose.connect(keys.mongoURI, { useNewUrlParser: true });
 

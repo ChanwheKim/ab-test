@@ -35,11 +35,11 @@ class LineChart extends Component {
 
     const xScale = d3.scaleTime()
       .domain(d3.extent(data[0].visits, d => d.date))
-      .range([0, width-margin]);
+      .range([0, width - margin]);
 
     const yScale = d3.scaleLinear()
       .domain([0, d3.max(data[0].visits, d => d.count)])
-      .range([height-margin, 0]);
+      .range([height - margin, 0]);
 
     const color = d3.scaleOrdinal(d3.schemeCategory10);
 
