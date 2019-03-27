@@ -5,6 +5,7 @@
   align-items: center;
   width: 100%;
   padding-left: 4rem;
+  padding-bottom: 3rem;
 
   &--control-panel {
     height: 5rem;
@@ -14,14 +15,14 @@
     align-items: center;
   }
 
-  &__first-row {
+  &__row {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     width: 100%;
 
     &--loader-wrapper {
-      width: 45rem !important;
+      width: 49.1rem;
       height: 30rem;
       display: flex;
       justify-content: center;
@@ -37,6 +38,10 @@
         color: rgba(#555, 1);
         animation: rotate 1.5s infinite linear;
         transform: translate(-50%, -50%);
+      }
+
+      &.donut {
+        width: 25rem !important;
       }
     }
   }
@@ -66,6 +71,7 @@
     background-color: #fff;
     box-shadow: 0 6px 12px rgba(0,0,0,0.175);
     min-width: 25rem;
+    z-index: 10000;
 
     &__list {
       display: flex;
@@ -167,8 +173,7 @@
     text-align: center;
     font-weight: 300;
     margin-right: 1.5rem;
-
-    width: 100%;
+    flex-grow: 1;
   }
 
   &__chart-label {
@@ -180,6 +185,30 @@
     justify-content: flex-start;
     align-items: center;
     padding-left: 2rem;
+  }
+
+  & .dashboard__column {
+    display: flex;
+    flex-direction: column;
+    width: 30rem;
+
+    & .average-time-label {
+      font-size: 2rem;
+      margin-right: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+
+      & .time{
+        font-size: 2.5rem;
+        margin-right: .7rem;
+      }
+
+      & .criteria {
+        transform: translateY(2px);
+      }
+    }
   }
 }
 

@@ -30,7 +30,7 @@ class WorldMap extends Component {
 
   render() {
     return (
-      <svg width={800} height={450} ref={this.svgRef} viewBox="0 0 800 300">
+      <svg width={700} height={400} ref={this.svgRef} viewBox="0 0 800 300">
         <g className="countries">
           {
             this.state.worldData.map((d,i) => (
@@ -69,6 +69,4 @@ export default WorldMap;
 
 WorldMap.propTypes = {
   data: PropTypes.array,
-  width: PropTypes.number,
-  height: PropTypes.number,
 };

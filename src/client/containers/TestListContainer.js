@@ -66,8 +66,6 @@ const mapDispatchToProps = dispatch => ({
   },
   onDashboardIconClick: async (pageId) => {
     dispatch(LoadingVisitInfo());
-    // dispatch(setFixedPage(pageId));
-    // dispatch(addSelectedPage(pageId));
   }
 });
 
