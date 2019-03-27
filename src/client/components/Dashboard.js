@@ -7,6 +7,7 @@ import './Dashboard.scss';
 import LineChart from './charts/LineChart';
 import BarChart from './charts/BarChart';
 import WorldMap from './charts/WorldMap';
+import DonutChart from './charts/DonutChart';
 
 class Dashboard extends Component {
   constructor(props) {
@@ -56,12 +57,12 @@ class Dashboard extends Component {
             }
           </div>
         </div>
-        <div className="dashboard__first-row">
+        <div className="dashboard__row">
           {
             this.props.isVisitLoading
               ?
               (
-                <div className="dashboard__first-row--loader-wrapper">
+                <div className="dashboard__row--loader-wrapper">
                   <FaSpinner size={19} className="loader" />
                 </div>
               )
@@ -77,11 +78,29 @@ class Dashboard extends Component {
             <div className="dashboard__chart-label">Conversion rate</div>
             <BarChart data={this.props.pages} width={400} height={200} />
           </div>
-          <div className="dashboard__chart-wrapper">
-            <div className="dashboard__chart-label">Something good here</div>
+          <div className="dashboard__chart-wrapper donut">
+            <div className="dashboard__chart-label">Visit by browser</div>
+            <DonutChart width={200} height={200} data={this.props.useragent} />
           </div>
         </div>
-        <WorldMap data={this.props.dataByRegion} />
+        <div className="dashboard__row">
+          <div className="dashboard__column">
+            <div className="dashboard__chart-wrapper">
+              <div className="dashboard__chart-label">AVG. time on pages</div>
+              <div className="average-time-label">
+                <span className="time">1:02</span>
+                <span className="criteria">min</span>
+              </div>
+            </div>
+            <div className="dashboard__chart-wrapper">
+              <div className="dashboard__chart-label">Revisit rate</div>
+            </div>
+          </div>
+          <div className="dashboard__chart-wrapper">
+            <div className="dashboard__chart-label">Approx location of client</div>
+            <WorldMap data={this.props.dataByRegion} />
+          </div>
+        </div>
       </div>
     );
   }

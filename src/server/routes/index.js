@@ -275,7 +275,7 @@ router.get('/test-page/:uniqId/screen-shot', async (req, res, next) => {
 
   const $ = cheerio.load(html);
 
-  $('body').append(script + dataset);
+  $('body').append(script + dataset + '</script>');
 
   res.send($.html());
 });
