@@ -8,13 +8,16 @@ const mapStateToProps = (state) => {
   const visitDataset = [];
   const visitByRegion = {};
   const visitByAgent = {};
+  const visitByCountry = {};
   const pages = state.testList.map(page => ({
     name: page.name,
     id: page._id,
     visit_count: page.visit_count,
     conversion: page.conversion,
   }));
+  const stayOnPages = [];
   let totalVisit = 0;
+  let totalRevisit = 0;
 
   state.testList.forEach((page) => {
     const pageData = {
@@ -22,13 +25,19 @@ const mapStateToProps = (state) => {
       visits: [],
     };
     const visitByDate = {};
+
     totalVisit += page.visitIds.length;
+    totalRevisit += page.revisit_count;
 
     page.visitIds.forEach((id) => {
       const visit = state.visits[id];
 
       if (!visit) {
         return;
+      }
+
+      if (visit.left_at) {
+        stayOnPages.push(new Date(visit.left_at) - new Date(visit.connected_at));
       }
 
       const date = new Date(visit.connected_at).toDateString();
@@ -63,6 +72,15 @@ const mapStateToProps = (state) => {
           name: agent,
         };
       }
+
+      if (visitByCountry[visit.geo.country]) {
+        visitByCountry[visit.geo.country].count++;
+      } else {
+        visitByCountry[visit.geo.country] = {
+          count: 1,
+          name: visit.geo.country,
+        };
+      }
     });
 
     pageData.visits.push(Object.values(visitByDate));
@@ -75,13 +93,20 @@ const mapStateToProps = (state) => {
     name: data.name,
   }));
 
+  const countries = Object.values(visitByCountry).map(data => ({
+    value: (data.count / totalVisit * 100).toFixed(2),
+    name: data.name,
+  }));
+
   return {
-    fixedPage: state.fixedPage,
     visitDataset,
     isVisitLoading: state.visits.isLoading,
     pages,
     dataByRegion: Object.values(visitByRegion),
     useragent,
+    revisitRate: ((totalRevisit / totalVisit) * 100).toFixed(2),
+    stayOnPages,
+    countries,
   };
 };
 

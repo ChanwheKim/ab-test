@@ -9,7 +9,7 @@ class DonutChart extends Component {
     this.svgRef = React.createRef();
   }
 
-  componentDidUpdate() {
+  componentDidMount() {
     const text = '';
     const { width, height, data } = this.props;
     const thickness = 30;
@@ -52,7 +52,7 @@ class DonutChart extends Component {
 
         g.append('text')
           .attr('class', 'value-text')
-          .text(`${d.data.value}`)
+          .text(`${d.data.value} %`)
           .attr('text-anchor', 'middle')
           .attr('dy', '.6em');
       })
