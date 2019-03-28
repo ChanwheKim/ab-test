@@ -53,3 +53,14 @@
 .modal-message {
   font-size: 1.5rem;
 }
+
+.btn-home {
+  position: absolute;
+  top: 3rem;
+  right: 6rem;
+  color: rgba(#212121, .7);
+  width: 5rem;
+  height: 5rem;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 7px;
+}

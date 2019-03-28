@@ -14,14 +14,19 @@ class TestList extends Component {
       name: '',
       showModal: false,
       selectedListId: '',
+      showDeleteModal: false,
+      willDeleteId: '',
     };
 
     this.inputRef = React.createRef();
+    this.inputPasswordRef = React.createRef();
 
     this.closeCode = this.closeCode.bind(this);
     this.closeModal = this.closeModal.bind(this);
+    this.closeConfirmModal = this.closeConfirmModal.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
     this.handleDashboardIconClick = this.handleDashboardIconClick.bind(this);
-    this.handleDeleteBtnClick = this.handleDeleteBtnClick.bind(this);
+    this.handleDeleteModal = this.handleDeleteModal.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
@@ -35,6 +40,13 @@ class TestList extends Component {
 
   closeModal() {
     this.setState({ showModal: false });
+  }
+
+  closeConfirmModal() {
+    this.setState({
+      showDeleteModal: false,
+      willDeleteId: '',
+    });
   }
 
   handleCodeClick(ev) {
@@ -51,18 +63,30 @@ class TestList extends Component {
 
   handleDashboardIconClick(ev) {
     const pageId = ev.target.closest('.icon-dashboard').dataset.id;
+    const { currentProject } = this.props;
 
-    this.props.history.push('/testlist/dashboard');
+    this.props.history.push(`/project/${currentProject}/dashboard`);
   }
 
-  handleDeleteBtnClick(ev) {
+  handleDelete(ev) {
+    const btnDelete = ev.currentTarget.classList.contains('delete-btn');
+
+    if (this.inputPasswordRef.current.value === 'Chanai6979*' && btnDelete) {
+      this.props.onDeleteBtnClick(this.state.willDeleteId);
+      this.setState({
+        showDeleteModal: false,
+        willDeleteId: '',
+      });
+    }
+  }
+
+  handleDeleteModal(ev) {
     const { id } = ev.currentTarget;
 
-    if (!id) {
-      return;
-    }
-
-    this.props.onDeleteBtnClick(id);
+    this.setState({
+      willDeleteId: id,
+      showDeleteModal: true,
+    });
   }
 
   handleInputChange(ev) {
@@ -99,7 +123,7 @@ class TestList extends Component {
       return;
     }
 
-    this.props.history.push('/screenshot');
+    this.props.history.push(`/project/testlist/${uniqid}/screenshot`);
     this.props.displayScreenshot(uniqid);
   }
 
@@ -157,7 +181,7 @@ class TestList extends Component {
               size={20}
               className="icon test-list__btn-delete"
               id={test._id}
-              onClick={this.handleDeleteBtnClick}
+              onClick={this.handleDeleteModal}
             />
           </div>
         </li>
@@ -168,8 +192,9 @@ class TestList extends Component {
   render() {
     const test = this.props.testList.find(item => item._id === this.state.selectedListId);
     const loading = this.props.isLoading && this.props.testList.length === 0;
+    const { currentProject } = this.props;
 
-    if (this.props.location.pathname === '/testlist/dashboard') {
+    if (this.props.location.pathname === `/project/${currentProject}/dashboard`) {
       return <DashboardContainer />;
     }
 
@@ -228,6 +253,28 @@ class TestList extends Component {
             </div>
           </Modal>
         }
+        {
+          this.state.showDeleteModal &&
+          <Modal onBackgroundClick={this.closeConfirmModal}>
+            <p className="delete-modal-description">Are you sure you want to delete it?</p>
+            <input
+              type="password"
+              className="password"
+              placeholder="Please input password"
+              ref={this.inputPasswordRef}
+            />
+            <div className="popup__buttons">
+              <div className="btn btn-agree delete-btn" onClick={this.handleDelete}>
+                <IoMdCheckmark size={20} />
+                <span>Delete</span>
+              </div>
+              <div className="btn btn-agree" onClick={this.closeConfirmModal}>
+                <IoMdClose size={20} />
+                <span>Cancel</span>
+              </div>
+            </div>
+          </Modal>
+        }
       </ul>
     );
   }
@@ -250,5 +297,6 @@ TestList.propTypes = {
       _id: PropTypes.string,
       uniqId: PropTypes.string,
     })
-  )
+  ),
+  isLoading: PropTypes.bool,
 };

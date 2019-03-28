@@ -11,14 +11,20 @@ class ProjectList extends Component {
 
     this.state = {
       showModal: false,
+      showDeleteModal: false,
       name: '',
       origin: '',
+      selectedProjectId: '',
     };
 
     this.inputRef = React.createRef();
     this.inputOrigin = React.createRef();
+    this.inputPassword = React.createRef();
 
     this.closeModal = this.closeModal.bind(this);
+    this.closeConfirmModal = this.closeConfirmModal.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
+    this.handleDeleteModal = this.handleDeleteModal.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleClick = this.handleClick.bind(this);
@@ -28,6 +34,10 @@ class ProjectList extends Component {
 
   closeModal() {
     this.setState({ showModal: false });
+  }
+
+  closeConfirmModal() {
+    this.setState({ showDeleteModal: false });
   }
 
   handleClick(ev) {
@@ -41,8 +51,27 @@ class ProjectList extends Component {
     if (!deleteBtn) {
       return this.props.onListClick(id);
     }
+  }
 
-    // this.props.onDeleteBtnClick(id);
+  handleDelete(ev) {
+    const btnDelete = ev.currentTarget.classList.contains('delete-btn');
+
+    if (this.inputPassword.current.value === 'Chanai6979*' && btnDelete) {
+      this.props.onDeleteBtnClick(this.state.selectedProjectId);
+      this.setState({
+        selectedProjectId: '',
+        showDeleteModal: false,
+      });
+    }
+  }
+
+  handleDeleteModal(ev) {
+    const { id } = ev.currentTarget;
+
+    this.setState({
+      selectedProjectId: id,
+      showDeleteModal: true,
+    });
   }
 
   handleInputChange(ev) {
@@ -81,10 +110,15 @@ class ProjectList extends Component {
 
   renderList() {
     return this.props.projects.map(item => (
-      <Link to="/" key={item._id}>
+      <Link to={`/project/${item._id}`} key={item._id}>
         <li className="project__list" id={item._id} onClick={this.handleClick}>
           <IoIosArrowForward size={15} className="project__list--icon-arrow" />
-          <IoMdClose size={17} className="project__list--btn-delete" />
+          <IoMdClose
+            size={17}
+            className="project__list--btn-delete"
+            id={item._id}
+            onClick={this.handleDeleteModal}
+          />
           <span className="project__list--name">{item.name}</span>
         </li>
       </Link>
@@ -106,7 +140,7 @@ class ProjectList extends Component {
         }
         {
           this.state.showModal &&
-          <Modal onClick={this.closeModal} onBackgroundClick={this.closeModal}>
+          <Modal onBackgroundClick={this.closeModal}>
             <span className="new-project__title">New Project</span>
             <input
               type="text"
@@ -131,6 +165,28 @@ class ProjectList extends Component {
                 <span onClick={this.handleSubmit}>Submit</span>
               </div>
               <div className="btn btn-agree" onClick={this.closeModal}>
+                <IoMdClose size={20} />
+                <span>Cancel</span>
+              </div>
+            </div>
+          </Modal>
+        }
+        {
+          this.state.showDeleteModal &&
+          <Modal onBackgroundClick={this.closeConfirmModal}>
+            <p className="delete-modal-description">Are you sure you want to delete it?</p>
+            <input
+              type="password"
+              className="password"
+              placeholder="Please input password"
+              ref={this.inputPassword}
+            />
+            <div className="popup__buttons">
+              <div className="btn btn-agree delete-btn" onClick={this.handleDelete}>
+                <IoMdCheckmark size={20} />
+                <span>Delete</span>
+              </div>
+              <div className="btn btn-agree" onClick={this.closeConfirmModal}>
                 <IoMdClose size={20} />
                 <span>Cancel</span>
               </div>

@@ -29,13 +29,15 @@ class WorldMap extends Component {
   }
 
   render() {
+    let key = 0;
+
     return (
       <svg width={580} height={300} ref={this.svgRef} viewBox="0 0 800 300">
         <g className="countries">
           {
             this.state.worldData.map((d,i) => (
               <path
-                key={`path-${i}`}
+                key={`path-${key++}`}
                 d={geoPath().projection(this.projection())(d)}
                 className="country"
                 fill="rgba(38, 50, 56, .1)"
@@ -49,13 +51,13 @@ class WorldMap extends Component {
           {
             this.props.data.map((city, i) => (
               <circle
+                key={key++}
                 cx={this.projection()(city.ll)[0]}
                 cy={this.projection()(city.ll)[1]}
                 r={5}
                 fill="#E91E63"
                 stroke="#ffffff"
                 className="marker"
-                key={city.key}
               />
             ))
           }

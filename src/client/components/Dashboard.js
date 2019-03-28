@@ -120,20 +120,20 @@ class Dashboard extends Component {
           <div className="dashboard__column">
             {
               this.props.isVisitLoading ?
-              <div className="dashboard__row--loader-wrapper time">
-                <FaSpinner size={19} className="loader" />
-              </div> :
-              <div className="dashboard__chart-wrapper">
-                <div className="dashboard__chart-label">AVG. time on pages</div>
-                <div className="average-time-label">
-                  <span className="time">
-                    {
-                      this.props.stayOnPages.length !== 0 &&
-                      this.convertMillsecToLabel()
-                    }
-                  </span>
+                <div className="dashboard__row--loader-wrapper time">
+                  <FaSpinner size={19} className="loader" />
+                </div> :
+                <div className="dashboard__chart-wrapper">
+                  <div className="dashboard__chart-label">AVG. time on pages</div>
+                  <div className="average-time-label">
+                    <span className="time">
+                      {
+                        this.props.stayOnPages.length !== 0 &&
+                        this.convertMillsecToLabel()
+                      }
+                    </span>
+                  </div>
                 </div>
-              </div>
             }
             <div className="dashboard__chart-wrapper">
               <div className="dashboard__chart-label">Total Revisit rate</div>
@@ -182,11 +182,23 @@ Dashboard.propTypes = {
       ),
     })
   ),
-  pages: PropTypes.array,
-  dataByRegion: PropTypes.array,
+  pages: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      id: PropTypes.string,
+      visit_count: PropTypes.number,
+      conversion: PropTypes.number,
+    }),
+  ),
+  dataByRegion: PropTypes.arrayOf(
+    PropTypes.shape({
+      count: PropTypes.number,
+      date: PropTypes.date,
+    }),
+  ),
   isVisitLoading: PropTypes.bool,
   revisitRate: PropTypes.string,
-  stayOnPages: PropTypes.array,
+  stayOnPages: PropTypes.arrayOf(PropTypes.number),
   countries: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string,

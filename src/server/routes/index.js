@@ -9,11 +9,10 @@ const cookie = require('cookie');
 
 const keys = require('../config/keys');
 const Project = require('../models/Project');
+const projectMiddleware = require('./project');
 const Test = require('../models/Test');
 const Visit = require('../models/Visit');
 const { GeneralServiceError, WrongEntityError } = require('../lib/error');
-
-const request = require('request-promise-native');
 
 const router = express.Router();
 mongoose.connect(keys.mongoURI, { useNewUrlParser: true });
@@ -28,37 +27,13 @@ db.once('open', () => {
   console.log('The database has been connected.');
 });
 
-router.post('/projects/:project_name', async (req, res, next) => {
-  const name = req.params.project_name;
-  const { origin } = req.body;
-  let newProject;
+router.post('/projects/:project_name', projectMiddleware.postProject);
 
-  try {
-    newProject = await new Project({
-      name,
-      origin,
-    }).save();
-  } catch (err) {
-    return next(new GeneralServiceError());
-  }
-
-  res.json(newProject);
-});
-
-router.get('/projects', async (req, res, next) => {
-  let projects;
-
-  try {
-    projects = await Project.find();
-  } catch (err) {
-    return next(new GeneralServiceError());
-  }
-
-  res.json(projects);
-});
+router.get('/projects', projectMiddleware.getProjects);
 
 router.delete('/projects/:project_id', async (req, res, next) => {
   let project = req.params.project_id;
+  let testLists;
 
   try {
     project = await Project.findOneAndDelete({ _id: project });
@@ -67,14 +42,20 @@ router.delete('/projects/:project_id', async (req, res, next) => {
   }
 
   try {
-    await Promise.all(project.testIds.map(
+    testLists = await Promise.all(project.testIds.map(
       test => Test.findOneAndDelete({ _id: test._id })
     ));
   } catch (err) {
     return next(new GeneralServiceError());
   }
 
-  res.json(project._id);
+  await Promise.all(
+    testLists.map(
+      page => Promise.all(page.visitIds.map(id => Visit.findOneAndDelete({ _id: id })))
+    )
+  );
+
+  res.json(project);
 });
 
 router.post('/projects/:project_id/testlist/:test_name', async (req, res, next) => {
@@ -196,7 +177,7 @@ router.post('/test-page/:uniqId', async (req, res, next) => {
   }
 
   if (event.name === 'connect') {
-    if (visitId && testPage.revisit_count) {
+    if (visitId && testPage.visit_count !== 0) {
       testPage.revisit_count++;
     }
 

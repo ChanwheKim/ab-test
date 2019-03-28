@@ -163,3 +163,23 @@ a {
   text-decoration: none;
   color: rgba(0, 0, 0, 0.84);
 }
+
+.delete-modal-description {
+  font-size: 1.5rem;
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+.password {
+  height: 3.8rem;
+  width: 30rem;
+  font-size: 1.3rem;
+  padding-left: 1rem;
+  letter-spacing: .7px;
+  margin-bottom: 1rem;
+  font-weight: 300;
+
+  &:focus {
+    outline: none;
+  }
+}

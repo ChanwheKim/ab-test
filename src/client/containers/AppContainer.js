@@ -51,16 +51,16 @@ const mapDispatchToProps = dispatch => ({
     dispatch(addNewProject(newProject.data));
   },
   onDeleteBtnClick: async (projectId) => {
-    let deletedProjectId;
+    let deletedProject;
 
     try {
-      deletedProjectId = await axios.delete(`/api/projects/${projectId}`);
+      deletedProject = await axios.delete(`/api/projects/${projectId}`);
     } catch (err) {
       dispatch(displayModal(err.message));
     }
 
     dispatch(removeCurrentProjectId());
-    dispatch(deleteProject(deletedProjectId.data));
+    dispatch(deleteProject(deletedProject.data._id));
   },
   onListClick: async (projectId) => {
     let testList;

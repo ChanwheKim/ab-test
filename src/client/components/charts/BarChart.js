@@ -10,7 +10,7 @@ class BarChart extends Component {
     this.svgRef = React.createRef();
   }
 
-  componentDidUpdate() {
+  componentDidMount() {
     const { data } = this.props;
     const margin = { top: 40, right: 15, bottom: 50, left: 15 };
     const { width, height } = this.props;

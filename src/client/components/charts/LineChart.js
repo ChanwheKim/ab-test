@@ -14,6 +14,7 @@ class LineChart extends Component {
     const { width, height, data } = this.props;
     const margin = 30;
     const duration = 250;
+    let maxVisit = 0;
 
     const lineOpacity = '0.25';
     const lineOpacityHover = '0.85';
@@ -33,12 +34,20 @@ class LineChart extends Component {
       });
     });
 
+    data.forEach((page) => {
+      const curMax = d3.max(page.visits, d => d.count);
+
+      if (maxVisit < curMax) {
+        maxVisit = curMax;
+      }
+    });
+
     const xScale = d3.scaleTime()
       .domain(d3.extent(data[0].visits, d => d.date))
       .range([0, width - margin]);
 
     const yScale = d3.scaleLinear()
-      .domain([0, d3.max(data[0].visits, d => d.count)])
+      .domain([0, maxVisit])
       .range([height - margin, 0]);
 
     const color = d3.scaleOrdinal(d3.schemeCategory10);

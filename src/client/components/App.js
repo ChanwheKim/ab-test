@@ -33,7 +33,7 @@ export default class App extends Component {
       <Router>
         <Switch>
           <Route
-            path="/screenshot"
+            path="/project/testlist/:uniq_id/screenshot"
             render={() => (
               <Screenshot screenshot={screenCapture} onUnmount={onScreenshotUnmount} />
             )}
