@@ -161,9 +161,17 @@ router.post('/test-page/:uniqId', async (req, res, next) => {
   const { uniqId } = req.params;
   const event = JSON.parse(req.query.event);
   const ip = req.query.ip || req.connection.remoteAddress;
-  const { visitId } = req.cookies;
+  const pageIdAndVisitId = req.cookies[uniqId];
+  let visitPageId;
+  let id;
   let visit;
   let testPage;
+
+  if (pageIdAndVisitId) {
+    visitPageId = pageIdAndVisitId.split('$$$')[0];
+    id = pageIdAndVisitId.split('$$$')[1];
+  }
+
   event.date = new Date();
 
   try {
@@ -177,7 +185,7 @@ router.post('/test-page/:uniqId', async (req, res, next) => {
   }
 
   if (event.name === 'connect') {
-    if (visitId && testPage.visit_count !== 0) {
+    if (visitPageId && visitPageId === uniqId && testPage.visit_count !== 0) {
       testPage.revisit_count++;
     }
 
@@ -209,7 +217,9 @@ router.post('/test-page/:uniqId', async (req, res, next) => {
 
     testPage.visit_count++;
 
-    res.setHeader('Set-Cookie', cookie.serialize('visitId', String(visit._id), {
+    const newPageIdAndVisitId = `${uniqId}$$$${visit._id}`;
+
+    res.setHeader('Set-Cookie', cookie.serialize(`${uniqId}`, String(newPageIdAndVisitId), {
       maxAge: 60 * 60 * 24 * 7,
     }));
   }
@@ -222,8 +232,8 @@ router.post('/test-page/:uniqId', async (req, res, next) => {
     }
   }
 
-  if (event.name === 'leave') {
-    const preVisit = await Visit.findById(visitId);
+  if (event.name === 'leave' && id) {
+    const preVisit = await Visit.findById(id);
 
     preVisit.left_at = new Date();
 

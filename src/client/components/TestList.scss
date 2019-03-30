@@ -35,14 +35,14 @@
       flex-direction: column;
       border-right: 1px solid rgba(0,0,0,0.1);
       width: 35%;
+      height: 100%;
 
       & .name-label {
         display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: flex-start;
-        height: 100%;
-        flex-grow: 1;
+        margin-top: 1rem;
         margin-bottom: 1rem;
   
         & .project-name {
@@ -58,6 +58,10 @@
         text-align: left;
         font-size: 1.2rem;
         color: rgba(#212121, .7);
+        width: 95%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
 
         &:hover {
           color: rgb(58, 163, 242);
