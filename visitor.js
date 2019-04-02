@@ -11,7 +11,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   }).then(res => res.json()).then(res => res.ip);
 
   console.log('tracking start');
-  fetch(`http://abtest-env.zui4w2hpdb.ap-northeast-2.elasticbeanstalk.com/api/test-page/${key}?event=${JSON.stringify(connectEvent)}&ip=${ip}`, {
+  fetch(`https://www.vanilla-ab-test.co/api/test-page/${key}?event=${JSON.stringify(connectEvent)}&ip=${ip}`, {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ window.addEventListener('DOMContentLoaded', async () => {
       isButtonCTA,
     };
     console.log('send click event');
-    fetch(`http://abtest-env.zui4w2hpdb.ap-northeast-2.elasticbeanstalk.com/api/test-page/${key}?event=${JSON.stringify(clickEvent)}`, {
+    fetch(`https://www.vanilla-ab-test.co/api/test-page/${key}?event=${JSON.stringify(clickEvent)}`, {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -48,7 +48,7 @@ window.onunload = () => {
     name: 'leave',
   };
   console.log('I will leave');
-  fetch(`http://abtest-env.zui4w2hpdb.ap-northeast-2.elasticbeanstalk.com/api/test-page/${key}?event=${JSON.stringify(event)}`, {
+  fetch(`https://www.vanilla-ab-test.co/api/test-page/${key}?event=${JSON.stringify(event)}`, {
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
