@@ -9,6 +9,8 @@
 - Usage
 - Tech
 - Things to do
+- Version Control
+- Other tools
 - Deployment
 - Sincere Thanks
 
@@ -61,7 +63,17 @@
 - Intergration Test.
 - Test Page 개별 리스트 별 대시보드 확인.
 - 로그인 기능 추가.
-- AWS 백엔드 인스턴스 인증 설정.
+- 반응형 대응.
+- 데이터 양의 증가에 따른 성능 최적화
+
+### Version Control
+- Version Control을 위해 git을 사용.
+- 개발 시 별도의 브랜치 생성 후, 각 기능 구현 후 master 브랜치에 병합함.
+
+### Other tools
+- Trello를 이용한 task 세분화 및 스케줄 관리.
+- Lucidchart를 이용한 schema design.
+- OmniGraffle을 이용한 Mockup design.
 
 ### Deployment
 - AWS Elastic Beanstalk
