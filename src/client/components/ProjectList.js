@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Link } from 'react-router-dom';
 import './ProjectList.scss';
 import { IoIosArrowForward, IoMdCheckmark, IoMdClose } from 'react-icons/io';
 import PropTypes from 'prop-types';
+import Button from './Button';
 import Modal from './Modal';
 
 class ProjectList extends Component {
@@ -23,6 +24,7 @@ class ProjectList extends Component {
 
     this.closeModal = this.closeModal.bind(this);
     this.closeConfirmModal = this.closeConfirmModal.bind(this);
+    this.displayListCreationModal = this.displayListCreationModal.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleDeleteModal = this.handleDeleteModal.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -38,6 +40,10 @@ class ProjectList extends Component {
 
   closeConfirmModal() {
     this.setState({ showDeleteModal: false });
+  }
+
+  displayListCreationModal() {
+    this.setState({ showModal: true });
   }
 
   handleClick(ev) {
@@ -128,13 +134,11 @@ class ProjectList extends Component {
   render() {
     return (
       <ul className="project">
-        <button
-          type="button"
-          className="project__btn-add"
-          onClick={() => this.setState({ showModal: true })}
+        <Button
+          onClick={this.displayListCreationModal}
         >
-          Set up project
-        </button>
+        Set up project
+        </Button>
         {
           this.renderList()
         }

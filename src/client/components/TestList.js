@@ -4,6 +4,7 @@ import { IoMdClose, IoMdCheckmark, IoMdTv } from 'react-icons/io';
 import { FaCode, FaChartLine, FaSpinner } from 'react-icons/fa';
 import PropTypes from 'prop-types';
 import DashboardContainer from '../containers/DashboardContainer';
+import Button from './Button';
 import Modal from './Modal';
 
 class TestList extends Component {
@@ -24,6 +25,7 @@ class TestList extends Component {
     this.closeCode = this.closeCode.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.closeConfirmModal = this.closeConfirmModal.bind(this);
+    this.displayListCreationModal = this.displayListCreationModal.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleDashboardIconClick = this.handleDashboardIconClick.bind(this);
     this.handleDeleteModal = this.handleDeleteModal.bind(this);
@@ -47,6 +49,10 @@ class TestList extends Component {
       showDeleteModal: false,
       willDeleteId: '',
     });
+  }
+
+  displayListCreationModal() {
+    this.setState({ showModal: true });
   }
 
   handleCodeClick(ev) {
@@ -200,14 +206,12 @@ class TestList extends Component {
 
     return (
       <ul className="test-list">
-        <button
-          type="button"
-          className="test-list__btn-add"
-          onClick={() => this.setState({ showModal: true })}
-          disabled={this.props.currentProject === ''}
+        <Button
+          onClick={this.displayListCreationModal}
+          disableStatus={this.props.currentProject === ''}
         >
           Add a test page
-        </button>
+        </Button>
         {
           loading &&
           <div className="loader-background">
